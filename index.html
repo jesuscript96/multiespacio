@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propuesta Digital Layer Publimex | Campaña de Inventario Vacío</title>
+  <meta name="description" content="Monetiza tu inventario OOH disponible. Campaña interactiva para captar anunciantes y demostrar interactividad móvil mediante códigos QR en espectaculares vacíos.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient background glow particles -->
+  <div class="ambient-glow" id="glow-1"></div>
+  <div class="ambient-glow" id="glow-2"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <span class="logo-red">PUBLI</span><span>MEX</span> <span class="logo-tag">CEO PITCH DEMO</span>
+      </div>
+      <nav>
+        <a href="#propuesta">Propuesta</a>
+        <a href="#demo">Simulador</a>
+        <a href="#analiticas">Impacto Comercial</a>
+        <a href="#redencion">Validación</a>
+        <button class="btn btn-secondary btn-sm" id="reset-campaign">Reiniciar Demo</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Demo Workspace (Hero Section) -->
+  <section class="workspace-section hero-workspace" id="demo">
+    <div class="hero-content text-center">
+      <div class="client-badge">PITCH ESTRATÉGICO PARA DIRECCIÓN GENERAL</div>
+      <h1>Activando el Inventario Vacío de Publimex</h1>
+      <p class="hero-lead">Transformemos las vallas y espectaculares sin pauta comercial en un canal masivo de generación de prospectos (leads) y demostración tecnológica. Interactúa con el simulador en tiempo real para experimentar la campaña.</p>
+      <div class="hero-actions" style="margin-bottom: 3rem;">
+        <a href="#analiticas" class="btn btn-outline">Ver KPI e Impacto de Ventas</a>
+        <a href="#redencion" class="btn btn-secondary">Simulador de Canje</a>
+      </div>
+    </div>
+
+    <div class="workspace-vertical-layout">
+      <!-- Top Row: Prominent Progress Dashboard (SVG Billboard & 3 Milestone Cards) -->
+      <div class="progress-dashboard glass-card">
+        <div class="progress-dashboard-left">
+          <div class="counter-display">
+            <span id="scans-count">0</span> / 5 <span class="counter-label">Vallas</span>
+          </div>
+          <!-- Interactive SVG Digital Billboard Tracker -->
+          <div class="bottle-view">
+            <svg class="bottle-svg" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <!-- Screen Clipping Path inside the billboard frame -->
+                <clipPath id="screen-clip-path">
+                  <rect x="25" y="35" width="150" height="110" rx="6" />
+                </clipPath>
+
+                <!-- Liquid/Energy Gradient (Publimex Red Neon) -->
+                <linearGradient id="neon-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#b0020a" />
+                  <stop offset="50%" stop-color="#E30613" />
+                  <stop offset="100%" stop-color="#ff2e38" />
+                </linearGradient>
+
+                <!-- Highlight Overlay for glass screen reflect -->
+                <linearGradient id="screen-glare" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="rgba(255, 255, 255, 0.18)" />
+                  <stop offset="40%" stop-color="rgba(255, 255, 255, 0.03)" />
+                  <stop offset="100%" stop-color="rgba(0, 0, 0, 0.4)" />
+                </linearGradient>
+              </defs>
+
+              <!-- Support Pole & Frame Structure -->
+              <!-- Unipolar Pole -->
+              <rect x="94" y="145" width="12" height="130" fill="#2d2d35" stroke="#1d1d23" stroke-width="1.5" />
+              <!-- Unipolar Base/Footing -->
+              <path d="M 85,275 L 115,275 L 120,290 L 80,290 Z" fill="#1d1d23" />
+              
+              <!-- Spotlight bars -->
+              <path d="M 40,25 L 45,35 M 100,25 L 100,35 M 160,25 L 155,35" stroke="#3a3a45" stroke-width="2" />
+              <!-- Spotlights -->
+              <circle cx="40" cy="23" r="4" fill="#5a5a65" />
+              <circle cx="100" cy="23" r="4" fill="#5a5a65" />
+              <circle cx="160" cy="23" r="4" fill="#5a5a65" />
+
+              <!-- Outer Screen Bezel / Frame -->
+              <rect x="20" y="30" width="160" height="120" rx="10" fill="#1b1b22" stroke="#3a3a45" stroke-width="3" />
+              <!-- Inner Shadow Bezel -->
+              <rect x="23" y="33" width="154" height="114" rx="8" fill="none" stroke="#0a0a0f" stroke-width="1.5" />
+
+              <!-- Screen Area (Clipped by screen dimensions) -->
+              <g clip-path="url(#screen-clip-path)">
+                <!-- Back screen background (Off State / Dark Grey) -->
+                <rect x="25" y="35" width="150" height="110" fill="#0d0d12" />
+
+                <!-- Wave container translating vertically (height 110px) -->
+                <!-- Level height: y range from 145 (empty) to 35 (full) -->
+                <g id="liquid-level-group" transform="translate(0, 145)">
+                  <!-- Background wave -->
+                  <path class="wave-bg" d="M 0,0 C 40,-6 80,6 120,-3 C 160,-12 200,-3 240,-6 L 240,150 L 0,150 Z" fill="#ff1f27" opacity="0.3" />
+                  <!-- Foreground wave -->
+                  <path class="wave-fg" d="M 0,0 C 40,6 80,-6 120,4 C 160,15 200,4 240,8 L 240,150 L 0,150 Z" fill="url(#neon-gradient)" />
+                  
+                  <!-- Dynamic bubble container managed by JS -->
+                  <g id="svg-bubbles-group"></g>
+                </g>
+                
+                <!-- Logo Outline Overlay (Glowing effect inside the screen) -->
+                <g opacity="0.85">
+                  <!-- Publimex Chevron Arrow Logo (Centered inside screen 25 to 175) -->
+                  <!-- Pointing right: 3 chevrons shape -->
+                  <path d="M 80,55 L 98,68 L 80,81 L 87,81 L 105,68 L 87,55 Z" fill="#ffffff" />
+                  
+                  <!-- Slogan / Branding text inside screen -->
+                  <text x="100" y="105" fill="#ffffff" font-family="'Outfit', sans-serif" font-weight="bold" font-size="13" text-anchor="middle" letter-spacing="0.05em">PUBLIMEX</text>
+                  <text x="100" y="117" fill="rgba(255, 255, 255, 0.6)" font-family="'Outfit', sans-serif" font-weight="600" font-size="5.5" text-anchor="middle" letter-spacing="0.08em">PUBLICIDAD EXTERIOR</text>
+                  
+                  <text id="screen-status-text" x="100" y="132" fill="#E30613" font-family="'Outfit', sans-serif" font-weight="800" font-size="6.5" text-anchor="middle" letter-spacing="0.1em">SISTEMA INACTIVO</text>
+                </g>
+              </g>
+
+              <!-- Glass Glare Reflection Overlay (Over screen contents) -->
+              <rect x="25" y="35" width="150" height="110" rx="6" fill="url(#screen-glare)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" pointer-events="none" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="progress-dashboard-right">
+          <div class="progress-right-header">
+            <h3>Hitos y Recompensas de la Campaña</h3>
+            <p class="progress-sub">Escanea espectaculares vacíos para desbloquear beneficios B2B inmediatos y boletos para la rifa comercial.</p>
+          </div>
+
+          <div class="milestones-horizontal-grid">
+            <!-- Milestone 1 -->
+            <div class="milestone-card" id="milestone-1" data-scans="1">
+              <div class="milestone-card-badge">HITO 1 • BRONZE</div>
+              <div class="milestone-card-indicator">1</div>
+              <h4>Mockup Digital</h4>
+              <p>Simulación fotorrealista de tu marca en un espectacular real en CDMX.</p>
+              <button class="btn btn-accent btn-xs claim-btn" data-milestone="1" disabled>Reclamar</button>
+            </div>
+
+            <!-- Milestone 3 -->
+            <div class="milestone-card" id="milestone-3" data-scans="3">
+              <div class="milestone-card-badge">HITO 3 • SILVER</div>
+              <div class="milestone-card-indicator">3</div>
+              <h4>15% Descuento</h4>
+              <p>Descuento aplicable a la contratación de tu primer mes de pauta exterior.</p>
+              <button class="btn btn-accent btn-xs claim-btn" data-milestone="3" disabled>Reclamar</button>
+            </div>
+
+            <!-- Milestone 5 -->
+            <div class="milestone-card" id="milestone-5" data-scans="5">
+              <div class="milestone-card-badge">HITO 5 • GOLD</div>
+              <div class="milestone-card-indicator">5</div>
+              <h4>Gran Sorteo</h4>
+              <p>Boleto para el sorteo de 1 día de publicidad exterior digital gratis.</p>
+              <button class="btn btn-accent btn-xs claim-btn" data-milestone="5" disabled>Ver Boleto</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row: 5 Billboard Cards to scan in a single horizontal row -->
+      <div class="billboards-horizontal-section">
+        <div class="billboards-horizontal-header">
+          <h3>Espacios Publicitarios Disponibles para Escaneo</h3>
+          <p>Haz clic en "Simular Escaneo" en cada espacio para completar el recorrido comercial.</p>
+        </div>
+        <div class="billboards-horizontal-row">
+          <!-- Billboard 1 -->
+          <div class="billboard-card glass-card" id="card-1">
+            <div class="card-image-container">
+              <img src="assets/reforma.png" alt="Publimex Reforma disponible" class="billboard-image" loading="lazy">
+              <div class="scan-overlay">
+                <button class="btn btn-primary scan-trigger-btn" data-id="1">Simular Escaneo</button>
+              </div>
+            </div>
+            <div class="card-details">
+              <div class="card-header-row">
+                <span class="location-badge">REFORMA</span>
+                <span class="status-indicator status-idle">Disponible</span>
+              </div>
+              <h4>Autobús - Reforma</h4>
+            </div>
+          </div>
+
+          <!-- Billboard 2 -->
+          <div class="billboard-card glass-card" id="card-2">
+            <div class="card-image-container">
+              <img src="assets/polanco.png" alt="Publimex Polanco disponible" class="billboard-image" loading="lazy">
+              <div class="scan-overlay">
+                <button class="btn btn-primary scan-trigger-btn" data-id="2">Simular Escaneo</button>
+              </div>
+            </div>
+            <div class="card-details">
+              <div class="card-header-row">
+                <span class="location-badge">POLANCO</span>
+                <span class="status-indicator status-idle">Disponible</span>
+              </div>
+              <h4>Pantalla - Polanco</h4>
+            </div>
+          </div>
+
+          <!-- Billboard 3 -->
+          <div class="billboard-card glass-card" id="card-3">
+            <div class="card-image-container">
+              <img src="assets/roma.png" alt="Publimex Colonia Roma mural" class="billboard-image" loading="lazy">
+              <div class="scan-overlay">
+                <button class="btn btn-primary scan-trigger-btn" data-id="3">Simular Escaneo</button>
+              </div>
+            </div>
+            <div class="card-details">
+              <div class="card-header-row">
+                <span class="location-badge">ROMA</span>
+                <span class="status-indicator status-idle">Disponible</span>
+              </div>
+              <h4>Muro Pintado - Roma</h4>
+            </div>
+          </div>
+
+          <!-- Billboard 4 -->
+          <div class="billboard-card glass-card" id="card-4">
+            <div class="card-image-container">
+              <img src="assets/condesa.png" alt="Publimex Condesa disponible" class="billboard-image" loading="lazy">
+              <div class="scan-overlay">
+                <button class="btn btn-primary scan-trigger-btn" data-id="4">Simular Escaneo</button>
+              </div>
+            </div>
+            <div class="card-details">
+              <div class="card-header-row">
+                <span class="location-badge">CONDESA</span>
+                <span class="status-indicator status-idle">Disponible</span>
+              </div>
+              <h4>Parabús - Condesa</h4>
+            </div>
+          </div>
+
+          <!-- Billboard 5 -->
+          <div class="billboard-card glass-card" id="card-5">
+            <div class="card-image-container">
+              <img src="assets/santafe.png" alt="Publimex Santa Fe unipolar disponible" class="billboard-image" loading="lazy">
+              <div class="scan-overlay">
+                <button class="btn btn-primary scan-trigger-btn" data-id="5">Simular Escaneo</button>
+              </div>
+            </div>
+            <div class="card-details">
+              <div class="card-header-row">
+                <span class="location-badge">SANTA FE</span>
+                <span class="status-indicator status-idle">Disponible</span>
+              </div>
+              <h4>Unipolar - Santa Fe</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proposal Card Grid (Context for CEO) -->
+  <section class="context-cards-section" id="propuesta">
+    <div class="context-cards-grid">
+      <div class="glass-card context-card">
+        <div class="context-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--coke-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5 5 0 0 0 8 8c0 1 .3 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+            <path d="M9 18h6" />
+            <path d="M10 22h4" />
+          </svg>
+        </div>
+        <h3>La Oportunidad</h3>
+        <p>Un espectacular vacío representa costo. Poner un anuncio propio de Publimex con un QR dinámico invita a comercios locales, agencias y transeúntes a participar por publicidad gratuita.</p>
+      </div>
+      <div class="glass-card context-card">
+        <div class="context-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--coke-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 2a10 10 0 0 1 10 10" />
+            <path d="M12 22a10 10 0 0 1-10-10" />
+            <circle cx="12" cy="12" r="6" />
+            <circle cx="12" cy="12" r="2" fill="var(--coke-red)" />
+          </svg>
+        </div>
+        <h3>El Flujo Gamificado</h3>
+        <p>Los usuarios escanean espectaculares disponibles en la ciudad. Cada escaneo llena su barra de progreso y desbloquea beneficios B2B inmediatos, culminando en un gran sorteo.</p>
+      </div>
+      <div class="glass-card context-card">
+        <div class="context-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--coke-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="var(--coke-red)" />
+          </svg>
+        </div>
+        <h3>Demostración de Valor</h3>
+        <p>Al participar, el anunciante experimenta la interactividad en carne propia. Publimex demuestra CTRs, geolocalización y atribución directa, facilitando el cierre de pautas anuales.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sales Pitch & B2B Analytics Dashboard -->
+  <section class="analytics-section" id="analiticas">
+    <div class="section-header">
+      <h2>Métricas Claves para la Dirección General</h2>
+      <p>Cómo beneficia esta campaña interactiva de autopromoción a los ingresos de Publimex.</p>
+    </div>
+
+    <div class="analytics-grid">
+      <!-- Stat 1 -->
+      <div class="stat-card glass-card">
+        <span class="stat-label">Conversión a Prospectos (Leads)</span>
+        <span class="stat-value">12.4%</span>
+        <span class="stat-change positive">PYMEs locales registrándose</span>
+      </div>
+
+      <!-- Stat 2 -->
+      <div class="stat-card glass-card">
+        <span class="stat-label">Leads Capturados (Estimado Semanal)</span>
+        <span class="stat-value" id="stats-total-scans">1,820</span>
+        <span class="stat-change positive">+22% vs métodos de venta fríos</span>
+      </div>
+
+      <!-- Stat 3 -->
+      <div class="stat-card glass-card">
+        <span class="stat-label">Retorno por Espacio Vacío (ROI)</span>
+        <span class="stat-value">3.2x</span>
+        <span class="stat-change positive">Monetización indirecta de inventario</span>
+      </div>
+
+      <!-- Stat 4 -->
+      <div class="stat-card glass-card">
+        <span class="stat-label">Costo por Lead Generado (CPL)</span>
+        <span class="stat-value">$2.40 USD</span>
+        <span class="stat-change positive">Uso costo marginal de espacio vacío</span>
+      </div>
+    </div>
+
+    <div class="analytics-details glass-card">
+      <div class="details-left">
+        <h4>Tasa de Escaneo de Espectaculares Vacíos (Por Ubicación)</h4>
+        <div class="bar-chart-container">
+          <div class="bar-row">
+            <span class="bar-label">Polanco</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 88%;"></div></div>
+            <span class="bar-value">620 scans</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Reforma</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 76%;"></div></div>
+            <span class="bar-value">480 scans</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Condesa</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 62%;"></div></div>
+            <span class="bar-value">360 scans</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Roma</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 50%;"></div></div>
+            <span class="bar-value">290 scans</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Santa Fe</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 15%;"></div></div>
+            <span class="bar-value">70 scans</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="details-right">
+        <h4>Justificación Estratégica</h4>
+        <ul class="pitch-bullets">
+          <li><strong>Monetización del Espacio Disponible:</strong> En vez de dejar la valla vacía o con autopublicidad estática pasiva, la convertimos en un motor de captación de leads activos que quieren anunciarse en Publimex.</li>
+          <li><strong>Demostración Tecnológica en Vivo:</strong> Cuando una gran marca o agencia escanea el QR por curiosidad, experimenta de inmediato la capacidad de integración móvil de Publimex. Funciona como una carta de presentación interactiva de nuestras capacidades digitales.</li>
+          <li><strong>Fidelización de Clientes:</strong> Entregar mockups digitales personalizados y pequeños descuentos en su primera pauta mensual estimula a negocios locales (PYMEs) a iniciarse en la publicidad exterior.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cashier Validation Mockup (Publimex Commercial Office) -->
+  <section class="redemption-section" id="redencion">
+    <div class="section-header">
+      <h2>Validador Comercial de Publimex</h2>
+      <p>Simula cómo el equipo de ventas valida un cupón de descuento o boleto del sorteo presentado por un prospecto.</p>
+    </div>
+
+    <div class="validation-container glass-card">
+      <div class="validator-ui">
+        <div class="validator-screen">
+          <div class="screen-brand">SISTEMA COMERCIAL PUBLIMEX</div>
+          <div id="validator-status" class="status-waiting">Esperando Código de Promoción...</div>
+          
+          <div class="validator-inputs">
+            <input type="text" id="coupon-code-input" placeholder="Ingresa código ej: PUBLIMEX-SILVER-XXXX" maxlength="25">
+            <button class="btn btn-primary" id="validate-coupon-btn">Validar Beneficio</button>
+          </div>
+          
+          <div id="validation-response" class="validation-message-box hidden">
+            <!-- Dynamic feedback -->
+          </div>
+        </div>
+
+        <div class="validator-context">
+          <h4>Flujo Comercial del Lead</h4>
+          <ol class="redemption-steps">
+            <li>El usuario escanea vallas vacías y genera su código único (Mockup, Descuento o Sorteo).</li>
+            <li>El código se asocia a su correo de registro en la landing page del teléfono.</li>
+            <li>Al contactar a un ejecutivo de ventas de Publimex, el cliente presenta su pase o cupón promocional.</li>
+            <li>El ejecutivo ingresa el código aquí para validar el descuento en la pauta contratada o registrar su boleto en el sorteo semanal del unipolar.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <p>&copy; 2026 PUBLIMEX S.A. de C.V. Todos los derechos reservados.</p>
+      <p class="footer-note">Propuesta tecnológica exclusiva para la Dirección General de Publimex.</p>
+    </div>
+  </footer>
+
+  <!-- NATIVE DIALOGS -->
+
+  <!-- Simulated Scanner Modal -->
+  <dialog id="scanner-modal" class="modal-dialog">
+    <div class="scanner-container">
+      <div class="scanner-header">
+        <h4>SIMULANDO ESCANEO DE CÓDIGO QR</h4>
+        <!-- Fix: explicit class to trigger dialog closing fallback in app.js -->
+        <button class="modal-close-btn" commandfor="scanner-modal" command="close">&times;</button>
+      </div>
+      <div class="scanner-viewport">
+        <!-- Visual frame of phone mockup -->
+        <div class="scanner-phone-frame">
+          <div class="scanner-lens">
+            <div class="scanner-laser"></div>
+            <!-- Dynamic text/preview -->
+            <div class="scanner-aim-box"></div>
+            <div class="scanner-info-text">Apuntando al QR de la valla Publimex...</div>
+          </div>
+        </div>
+      </div>
+      <div class="scanner-footer">
+        <p>El código QR transfiere geolocalización cifrada al servidor para certificar la visita física del usuario.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Reward Coupon Modal -->
+  <dialog id="reward-modal" class="modal-dialog">
+    <div class="reward-wallet-card" id="reward-wallet-card-container">
+      <div class="wallet-header">
+        <div class="wallet-brand">
+          <span class="logo-red" style="font-weight: 800; font-size: 0.95rem;">PUBLI</span><span style="font-weight: 800; font-size: 0.95rem; color: #fff;">MEX</span>
+        </div>
+        <div class="wallet-title-badge" id="reward-badge-type">Bronze Pass</div>
+      </div>
+      
+      <div class="wallet-body">
+        <h3 id="reward-wallet-title">Mockup Digital Gratis</h3>
+        <p class="wallet-desc" id="reward-wallet-description">Obtén una previsualización fotorrealista de cómo se vería tu marca impresa en un espectacular espectacular Publimex de la Ciudad de México.</p>
+        
+        <div class="wallet-meta">
+          <div>
+            <span class="meta-label">CÓDIGO PROMO</span>
+            <span class="meta-value font-mono" id="reward-wallet-code">PUBLIMEX-BRONZE-842D</span>
+          </div>
+          <div>
+            <span class="meta-label">EXPIRACIÓN</span>
+            <span class="meta-value">31 de Agosto, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wallet-footer">
+        <!-- Mock barcode -->
+        <div class="wallet-barcode">
+          <div class="barcode-lines"></div>
+          <span class="barcode-text" id="reward-wallet-barcode-txt">PUBLIMEX-BRONZE-842D</span>
+        </div>
+
+        <div class="wallet-actions">
+          <button class="btn btn-primary btn-sm save-wallet-btn" id="save-wallet-action">Guardar en Apple Wallet</button>
+          <button class="btn btn-close-modal" commandfor="reward-modal" command="close">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
