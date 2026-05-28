@@ -1112,6 +1112,168 @@ footer {
   bottom: 1.5rem;
   font-size: 0.8rem;
   color: var(--text-secondary);
+  z-index: 5;
+}
+
+/* QR Code Preview Target */
+.qr-target-preview {
+  position: absolute;
+  inset: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.mini-qr-svg {
+  width: 50%;
+  height: 50%;
+  color: rgba(255, 255, 255, 0.8);
+  animation: qr-pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes qr-pulse {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+/* Success Screen & Billboard Progress Animation */
+.scanner-viewport-wrapper {
+  transition: all 0.4s ease;
+}
+
+.scanner-screen-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem 1.5rem;
+  background: #020204;
+  animation: modalFadeIn 0.4s ease-out forwards;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.success-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: white;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.01em;
+}
+
+.success-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+}
+
+.modal-billboard-container {
+  width: 130px;
+  height: 180px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-billboard-svg {
+  height: 100%;
+  width: auto;
+  filter: drop-shadow(0 10px 25px rgba(227, 6, 19, 0.35));
+}
+
+.modal-billboard-svg #modal-liquid-level-group {
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.progress-details-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.progress-details-text strong {
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid var(--glass-border);
+  font-family: var(--font-sans);
+}
+
+.success-actions {
+  width: 100%;
+}
+
+.success-actions .btn {
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(227, 6, 19, 0.3);
+}
+
+/* Premium Checkmark Drawing Animation */
+.success-icon-animation {
+  width: 54px;
+  height: 54px;
+  margin-bottom: 0.5rem;
+}
+
+.checkmark-svg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2.5;
+  stroke: #10b981;
+  stroke-miterlimit: 10;
+  box-shadow: inset 0px 0px 0px #10b981;
+  animation: fill-checkmark .4s ease-in-out .4s forwards, scale-checkmark .3s ease-in-out .9s both;
+}
+
+.checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2.5;
+  stroke-miterlimit: 10;
+  stroke: #10b981;
+  fill: none;
+  animation: stroke-circle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  stroke: white;
+  stroke-linecap: round;
+  animation: stroke-check 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke-circle {
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes stroke-check {
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes fill-checkmark {
+  100% { box-shadow: inset 0px 0px 0px 30px #10b981; }
+}
+
+@keyframes scale-checkmark {
+  0%, 100% { transform: none; }
+  50% { transform: scale3d(1.1, 1.1, 1); }
 }
 
 .scanner-footer {

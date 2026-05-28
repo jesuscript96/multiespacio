@@ -232,8 +232,80 @@ function triggerBubbleExplosion() {
   }, 100);
 }
 
-// --- 6. SIMULACIÓN DE ESCANEO DE QR ---
+// --- 5.1 BURBUJAS LOCALES PARA EL MODAL DE ESCANEO ---
+let modalBubbleInterval = null;
+
+function createModalSVGBubble(intensity = 1, currentScans) {
+  const bubblesGroup = document.getElementById('modal-svg-bubbles-group');
+  if (!bubblesGroup) return;
+
+  if (currentScans === 0) return;
+
+  const currentY = 145 - (currentScans * 22);
+
+  const numBubbles = Math.ceil(Math.random() * intensity);
+  for (let i = 0; i < numBubbles; i++) {
+    const bubble = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    
+    // Posición X aleatoria dentro de la pantalla (x: 40 a 160)
+    const x = 40 + Math.random() * 120; 
+    
+    // Altura máxima a la que flotará antes de desaparecer
+    const floatDistance = - (15 + Math.random() * (currentY - 10));
+    
+    bubble.setAttribute('cx', x);
+    bubble.setAttribute('cy', 0); // Relativo al grupo del líquido
+    bubble.setAttribute('r', 1.0 + Math.random() * 2.0); // Burbujas un poco más chicas para el modal
+    bubble.setAttribute('fill', 'rgba(255, 255, 255, 0.6)');
+    bubble.setAttribute('class', 'svg-bubble');
+    
+    bubble.style.setProperty('--float-dist', `${floatDistance}px`);
+    const duration = 1.5 + Math.random() * 1.5;
+    bubble.style.animationDuration = `${duration}s`;
+
+    bubblesGroup.appendChild(bubble);
+
+    setTimeout(() => {
+      if (bubble.parentNode) {
+        bubble.parentNode.removeChild(bubble);
+      }
+    }, duration * 1000);
+  }
+}
+
+function startModalBubbleGenerator(scans) {
+  stopModalBubbleGenerator();
+  if (scans === 0) return;
+  modalBubbleInterval = setInterval(() => {
+    createModalSVGBubble(1, scans);
+  }, 600);
+}
+
+function stopModalBubbleGenerator() {
+  if (modalBubbleInterval) {
+    clearInterval(modalBubbleInterval);
+    modalBubbleInterval = null;
+  }
+  const bubblesGroup = document.getElementById('modal-svg-bubbles-group');
+  if (bubblesGroup) {
+    bubblesGroup.innerHTML = '';
+  }
+}
+
+function triggerModalBubbleExplosion(intensity = 3, scans) {
+  let count = 0;
+  const interval = setInterval(() => {
+    createModalSVGBubble(intensity, scans);
+    count++;
+    if (count > 5) clearInterval(interval);
+  }, 100);
+}
+
+// --- 6. SIMULACIÓN DE ESCANEO DE QR (FLUJO DE DOS FASES) ---
+let activeScanningBillboardId = null;
 let scanTimeout = null;
+let scanSuccessTimeout = null;
+let hasRegisteredActiveScan = false;
 
 function startSimulatedScan(billboardId) {
   if (state.scanned.includes(billboardId)) {
@@ -241,30 +313,126 @@ function startSimulatedScan(billboardId) {
     return;
   }
 
+  activeScanningBillboardId = billboardId;
+  hasRegisteredActiveScan = false;
+
   const modal = document.getElementById('scanner-modal');
+  const wrapper = document.getElementById('scanner-viewport-wrapper');
+  const screenScan = modal.querySelector('.scanner-screen-scan');
+  const screenSuccess = modal.querySelector('.scanner-screen-success');
+  const scanStatusText = document.getElementById('scanner-scan-status');
+  const modalTitle = document.getElementById('scanner-modal-title');
+  const modalFooter = document.getElementById('scanner-modal-footer');
+
+  // Inicializar estado del popup (modo escaneando)
+  wrapper.className = 'scanner-viewport-wrapper state-scanning';
+  screenScan.classList.remove('hidden');
+  screenSuccess.classList.add('hidden');
+  modalTitle.textContent = 'SIMULANDO ESCANEO DE CÓDIGO QR';
+  modalFooter.classList.remove('hidden');
+
+  const billboard = billboards[billboardId];
+  scanStatusText.textContent = `Apuntando al QR en ${billboard.name}...`;
+
   modal.showModal();
 
-  // Guardar el timeout para poder cancelarlo si el usuario cierra el modal manualmente
+  // Fase 1: Escaneo de la cámara por 1.5 segundos
   scanTimeout = setTimeout(() => {
-    completeScan(billboardId);
-  }, 1800);
+    scanTimeout = null;
+    showScanSuccess(billboardId);
+  }, 1500);
 }
 
-function completeScan(billboardId) {
+function showScanSuccess(billboardId) {
+  const modal = document.getElementById('scanner-modal');
+  const wrapper = document.getElementById('scanner-viewport-wrapper');
+  const screenScan = modal.querySelector('.scanner-screen-scan');
+  const screenSuccess = modal.querySelector('.scanner-screen-success');
+  const modalTitle = document.getElementById('scanner-modal-title');
+  const modalFooter = document.getElementById('scanner-modal-footer');
+
+  // Cambiar vista del popup a pantalla de éxito
+  wrapper.className = 'scanner-viewport-wrapper state-success';
+  screenScan.classList.add('hidden');
+  screenSuccess.classList.remove('hidden');
+  modalTitle.textContent = '¡REGISTRO EXITOSO!';
+  modalFooter.classList.add('hidden');
+
+  const billboard = billboards[billboardId];
+  document.getElementById('scanner-success-location').textContent = billboard.name;
+
+  // Obtener progreso previo y nuevo
+  const previousScans = state.scanned.length;
+  const newScans = previousScans + 1;
+
+  const modalLiquid = document.getElementById('modal-liquid-level-group');
+  const modalStatus = document.getElementById('modal-screen-status-text');
+  const modalProgressTxt = document.getElementById('modal-progress-text');
+
+  // Inicializar la valla del modal al nivel previo al escaneo
+  const initialY = 145 - (previousScans * 22);
+  modalLiquid.setAttribute('transform', `translate(0, ${initialY})`);
+
+  if (previousScans === 0) {
+    modalStatus.textContent = 'VACANTE - ESCANEA QR';
+    modalStatus.setAttribute('fill', '#E30613');
+  } else {
+    modalStatus.textContent = `SEÑAL ACTIVA ${previousScans * 20}%`;
+    modalStatus.setAttribute('fill', '#10b981');
+  }
+  modalProgressTxt.textContent = `${previousScans} / 5 Vallas`;
+
+  // Reproducir campana de éxito y activar burbujas en el modal
+  playChime(true);
+  startModalBubbleGenerator(previousScans);
+
+  // Fase 2: Rellenar la valla del modal (se activa tras un breve retraso)
+  setTimeout(() => {
+    const targetY = 145 - (newScans * 22);
+    modalLiquid.setAttribute('transform', `translate(0, ${targetY})`);
+    
+    if (newScans === 5) {
+      modalStatus.textContent = 'SORTEO 1 DIA COMPLETO';
+      modalStatus.setAttribute('fill', '#ffd700');
+    } else {
+      modalStatus.textContent = `SEÑAL ACTIVA ${newScans * 20}%`;
+      modalStatus.setAttribute('fill', '#10b981');
+    }
+    modalProgressTxt.textContent = `${newScans} / 5 Vallas`;
+    
+    // Disparar burbujas explosivas al llegar al nuevo nivel
+    triggerModalBubbleExplosion(3, newScans);
+    // Reiniciar generador con la nueva cantidad de líquido
+    startModalBubbleGenerator(newScans);
+  }, 400);
+
+  // Programar auto-cierre en 3.5 segundos (3500ms)
+  scanSuccessTimeout = setTimeout(() => {
+    scanSuccessTimeout = null;
+    finalizeScan();
+  }, 3500);
+}
+
+function finalizeScan() {
+  if (hasRegisteredActiveScan) return;
+  hasRegisteredActiveScan = true;
+
+  const billboardId = activeScanningBillboardId;
+  clearTimeoutsAndReset();
+
   const modal = document.getElementById('scanner-modal');
   if (modal.open) {
     modal.close();
   }
 
-  if (!state.scanned.includes(billboardId)) {
+  if (billboardId && !state.scanned.includes(billboardId)) {
     state.scanned.push(billboardId);
     saveCampaignState();
     
-    playChime(true);
     triggerBubbleExplosion();
     updateUI();
     
-    // Incrementar número de leads/escaneos en el dashboard de analíticas
+    // Incrementar estadísticas en el panel de analíticas
     animateDashboardStats();
 
     // Comprobar si se desbloqueó algún Hito
@@ -275,6 +443,15 @@ function completeScan(billboardId) {
       }, 800);
     }
   }
+}
+
+function clearTimeoutsAndReset() {
+  if (scanTimeout) clearTimeout(scanTimeout);
+  if (scanSuccessTimeout) clearTimeout(scanSuccessTimeout);
+  scanTimeout = null;
+  scanSuccessTimeout = null;
+  activeScanningBillboardId = null;
+  stopModalBubbleGenerator();
 }
 
 // --- 7. APERTURA DE RECOMPENSAS (CUPONES WALLET) ---
@@ -463,12 +640,6 @@ function setupDialogSafeClosing() {
       const dialog = document.getElementById(dialogId);
       if (dialog) {
         dialog.close();
-        
-        // Si el diálogo cerrado es el escáner, cancelamos el escaneo en progreso
-        if (dialogId === 'scanner-modal' && scanTimeout) {
-          clearTimeout(scanTimeout);
-          scanTimeout = null;
-        }
       }
     }
   });
@@ -481,12 +652,6 @@ function setupDialogSafeClosing() {
         rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
       if (!isInDialog) {
         dialog.close();
-        
-        // Cancelar escaneo en progreso si aplica
-        if (dialog.id === 'scanner-modal' && scanTimeout) {
-          clearTimeout(scanTimeout);
-          scanTimeout = null;
-        }
       }
     });
   });
@@ -591,6 +756,28 @@ function setupEventListeners() {
       startSimulatedScan(id);
     });
   });
+
+  // Continuar en el modal de éxito del escáner
+  const continueBtn = document.getElementById('modal-continue-btn');
+  if (continueBtn) {
+    continueBtn.addEventListener('click', () => {
+      finalizeScan();
+    });
+  }
+
+  // Escuchar cierre nativo del modal para registrar o cancelar el escaneo
+  const scannerModal = document.getElementById('scanner-modal');
+  if (scannerModal) {
+    scannerModal.addEventListener('close', () => {
+      if (activeScanningBillboardId) {
+        if (!scanTimeout && scanSuccessTimeout) {
+          finalizeScan();
+        } else {
+          clearTimeoutsAndReset();
+        }
+      }
+    });
+  }
 
   // Escuchar botones de reclamo
   document.querySelectorAll('.claim-btn').forEach(btn => {
