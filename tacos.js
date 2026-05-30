@@ -539,20 +539,50 @@ function startSimulatedScan(teamKey, billboardId) {
   // Fase 1: Enfoque de cámara por 1.5 segundos
   scanTimeout = setTimeout(() => {
     scanTimeout = null;
-    showScanSuccess(teamKey);
+    showVotingForm(teamKey);
   }, 1500);
+}
+
+function showVotingForm(teamKey) {
+  const modal = document.getElementById('scanner-modal');
+  const wrapper = document.getElementById('scanner-viewport-wrapper');
+  const screenScan = modal.querySelector('.scanner-screen-scan');
+  const screenForm = document.getElementById('scanner-screen-form');
+  const screenSuccess = modal.querySelector('.scanner-screen-success');
+  const modalTitle = document.getElementById('scanner-modal-title');
+  const modalFooter = document.getElementById('scanner-modal-footer');
+
+  wrapper.className = 'scanner-viewport-wrapper state-form';
+  screenScan.classList.add('hidden');
+  if (screenForm) screenForm.classList.remove('hidden');
+  screenSuccess.classList.add('hidden');
+  modalTitle.textContent = 'REGISTRO DE VOTO B2C';
+  modalFooter.classList.add('hidden');
+
+  // Pre-seleccionar la taquería correspondiente al botón clickeado
+  const selectEl = document.getElementById('vote-taqueria-select');
+  if (selectEl) {
+    selectEl.value = teamKey;
+  }
+
+  // Limpiar campos anteriores del formulario
+  document.getElementById('vote-user-name').value = '';
+  document.getElementById('vote-user-email').value = '';
+  document.getElementById('vote-user-phone').value = '';
 }
 
 function showScanSuccess(teamKey) {
   const modal = document.getElementById('scanner-modal');
   const wrapper = document.getElementById('scanner-viewport-wrapper');
   const screenScan = modal.querySelector('.scanner-screen-scan');
+  const screenForm = document.getElementById('scanner-screen-form');
   const screenSuccess = modal.querySelector('.scanner-screen-success');
   const modalTitle = document.getElementById('scanner-modal-title');
   const modalFooter = document.getElementById('scanner-modal-footer');
 
   wrapper.className = 'scanner-viewport-wrapper state-success';
   screenScan.classList.add('hidden');
+  if (screenForm) screenForm.classList.add('hidden');
   screenSuccess.classList.remove('hidden');
   modalTitle.textContent = '¡VOTO Y SELLO REGISTRADO!';
   modalFooter.classList.add('hidden');
@@ -696,6 +726,17 @@ function clearTimeoutsAndReset() {
   }
   activeScanningTeamKey = null;
   activeScanningBillboardId = null;
+
+  // Reset modal screen visibilities
+  const modal = document.getElementById('scanner-modal');
+  if (modal) {
+    const screenScan = modal.querySelector('.scanner-screen-scan');
+    const screenForm = document.getElementById('scanner-screen-form');
+    const screenSuccess = modal.querySelector('.scanner-screen-success');
+    if (screenScan) screenScan.classList.remove('hidden');
+    if (screenForm) screenForm.classList.add('hidden');
+    if (screenSuccess) screenSuccess.classList.add('hidden');
+  }
 }
 
 // --- 7. APERTURA DE CUPÓN DE RECOMPENSA ---
@@ -979,6 +1020,42 @@ function setupEventListeners() {
   if (continueBtn) {
     continueBtn.addEventListener('click', () => {
       finalizeScan();
+    });
+  }
+
+  const votingForm = document.getElementById('tacos-voting-form');
+  if (votingForm) {
+    votingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const selectEl = document.getElementById('vote-taqueria-select');
+      const nameEl = document.getElementById('vote-user-name');
+      const emailEl = document.getElementById('vote-user-email');
+      const phoneEl = document.getElementById('vote-user-phone');
+
+      if (!selectEl || !nameEl || !emailEl || !phoneEl) return;
+
+      const taqueriaKey = selectEl.value;
+      const userName = nameEl.value.trim();
+      const userEmail = emailEl.value.trim();
+      const userPhone = phoneEl.value.trim();
+
+      if (!userName || !userEmail || !userPhone) {
+        alert('Por favor completa todos los campos del formulario.');
+        return;
+      }
+
+      // Voto registrado correctamente
+      // Ocultar formulario
+      const screenForm = document.getElementById('scanner-screen-form');
+      if (screenForm) {
+        screenForm.classList.add('hidden');
+      }
+
+      // Actualizar clave escaneada activa (en caso de que hayan cambiado la selección en el dropdown!)
+      activeScanningTeamKey = taqueriaKey;
+
+      showScanSuccess(taqueriaKey);
     });
   }
 

@@ -3202,3 +3202,28 @@ footer {
   pointer-events: none;
   z-index: 10000;
 }
+
+.tacos-theme .scanner-screen-form {
+  padding: 1.5rem 1rem !important;
+  background: #0c0b0b !important;
+  animation: modalFadeIn 0.4s ease-out forwards;
+}
+
+.tacos-theme .scanner-screen-form select,
+.tacos-theme .scanner-screen-form input {
+  border-radius: 0 !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(220, 38, 38, 0.25) !important;
+  color: #fff !important;
+  font-family: inherit;
+  font-size: 0.85rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tacos-theme .scanner-screen-form select:focus,
+.tacos-theme .scanner-screen-form input:focus {
+  outline: none !important;
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 8px rgba(220, 38, 38, 0.3) !important;
+}
