@@ -1476,3 +1476,1120 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* --- PROPOSAL TOGGLE --- */
+.proposal-toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+.toggle-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+.proposal-toggle {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
+  padding: 0.25rem;
+  border-radius: 30px;
+  backdrop-filter: blur(8px);
+}
+.toggle-option {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 0.45rem 1.2rem;
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.toggle-option:hover {
+  color: #fff;
+}
+.toggle-option.active {
+  background: var(--coke-red);
+  color: #fff;
+  box-shadow: 0 2px 12px var(--coke-red-glow);
+}
+
+/* --- VISUAL SHOWCASE (PHOTO PROTAGONISTA) --- */
+.visual-showcase-section {
+  max-width: 1200px;
+  margin: 1.5rem auto 2rem;
+  padding: 0 2rem;
+}
+.visual-showcase-card {
+  border-color: rgba(227, 6, 19, 0.25);
+  box-shadow: 0 0 35px rgba(227, 6, 19, 0.08), 0 12px 40px rgba(0, 0, 0, 0.6);
+  background: linear-gradient(180deg, rgba(20, 20, 25, 0.8) 0%, rgba(15, 15, 18, 0.95) 100%);
+  border-radius: 20px;
+  padding: 2rem;
+}
+.visual-showcase-header {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 0.75rem;
+}
+.visual-showcase-header h3 {
+  font-size: 1.6rem;
+  color: #fff;
+  margin: 0.4rem 0 0.2rem;
+}
+.visual-showcase-header p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+.visual-showcase-container {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+.visual-showcase-image-wrapper {
+  flex: 1.3;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+.showcase-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.visual-showcase-image-wrapper:hover .showcase-img {
+  transform: scale(1.02);
+}
+.image-lens-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 75% 45%, rgba(227, 6, 19, 0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.visual-showcase-details {
+  flex: 0.7;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.visual-showcase-details h4 {
+  font-size: 1.25rem;
+  color: #fff;
+  border-left: 3px solid var(--coke-red);
+  padding-left: 0.6rem;
+}
+.showcase-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* --- SOCCER BILLBOARDS (COMPACT HORIZONTAL ROW) --- */
+.matchups-horizontal-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  width: 100%;
+}
+.soccer-matchup-card {
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  border-radius: 12px;
+  background: var(--obsidian-card);
+}
+.soccer-matchup-card:hover {
+  border-color: rgba(212, 175, 55, 0.25);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.05);
+}
+.matchup-billboard-view {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: #121215;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+.matchup-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.soccer-matchup-card:hover .matchup-bg-image {
+  transform: scale(1.03);
+}
+.matchup-overlay-minimal {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 2;
+}
+.matchup-header-tag {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #fff;
+  background: rgba(10, 10, 12, 0.9);
+  border: 1px solid var(--glass-border);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  backdrop-filter: blur(2px);
+}
+.matchup-details {
+  padding-top: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.matchup-location-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.matchup-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Scoreboard design */
+.matchup-scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 10, 12, 0.7);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.35rem;
+  gap: 0.15rem;
+}
+.scoreboard-team {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.1rem;
+}
+.scoreboard-flag {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.scoreboard-team-name {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+.scoreboard-votes {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #10b981;
+  font-family: monospace;
+  letter-spacing: 0.01em;
+}
+.votes-label {
+  font-size: 0.5rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+}
+.scoreboard-vs {
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: #ffd700;
+  padding: 0.1rem 0.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+.matchup-scan-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+}
+.btn-scan-option {
+  padding: 0.4rem 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 5px;
+}
+
+/* --- SOCCER ALBUM COMPACT SECTION (MAX 100VH) --- */
+.album-compact-section {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  max-height: 100vh;
+}
+.album-book-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  background: linear-gradient(135deg, #0e1e12 0%, #060e08 100%); /* Green book leather/fabric gradient */
+  border: 2px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.15);
+  border-radius: 20px;
+  padding: 2rem;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+/* Album middle binding seam */
+.album-book-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 318px;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(255,255,255,0.05) 50%, rgba(0,0,0,0.5) 100%);
+  z-index: 5;
+}
+.album-book-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  gap: 1.5rem;
+  z-index: 2;
+}
+.album-cover-header h2 {
+  font-size: 1.4rem;
+  color: #ffd700;
+  margin: 0.4rem 0 0.2rem;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+.album-cover-header p {
+  font-size: 0.8rem;
+  color: #a3b899;
+  line-height: 1.4;
+}
+.album-badge {
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: #ffd700;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  display: inline-block;
+  background: rgba(255, 215, 0, 0.05);
+}
+.album-progress-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.soccer-ball-tracker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.soccer-ball-svg {
+  width: 110px;
+  height: 110px;
+  filter: drop-shadow(0 6px 15px rgba(227, 6, 19, 0.15));
+}
+.soccer-ball-ring {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.04);
+  stroke-width: 8;
+}
+.soccer-ball-progress {
+  fill: none;
+  stroke: #ffd700;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 440;
+  stroke-dashoffset: 440;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#album-status-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #ffd700;
+  letter-spacing: 0.08em;
+  margin-top: 0.4rem;
+}
+
+/* 2x5 Sticker Album Grid */
+.album-book-right {
+  z-index: 2;
+}
+.cromo-album-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Album slots / hollows (Panini look) */
+.album-slot {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1.5px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.album-slot-num {
+  position: absolute;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.03);
+  z-index: 1;
+}
+.album-slot-shield-placeholder {
+  width: 50%;
+  height: 50%;
+  opacity: 0.06;
+  filter: grayscale(1);
+  z-index: 2;
+  transition: opacity 0.3s;
+}
+.album-slot:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.02);
+}
+.album-slot:hover .album-slot-shield-placeholder {
+  opacity: 0.12;
+}
+.album-slot-team-name {
+  position: absolute;
+  bottom: 6px;
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.15);
+  z-index: 2;
+  text-transform: uppercase;
+}
+
+/* Real Paper Cromo (Stickers pasted over slots) */
+.real-cromo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #161a1d 0%, #0b0c10 100%);
+  border: 3.5px solid #ffffff; /* Characteristic paper sticker white border */
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.25rem;
+  z-index: 10;
+  transform: rotate(0deg);
+  transition: transform 0.3s;
+  pointer-events: auto;
+}
+.real-cromo:hover {
+  transform: scale(1.15) rotate(-1deg) !important;
+  z-index: 20;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+}
+
+/* Holographic shiny textures for star stickers */
+.real-cromo.shiny-foil {
+  background: linear-gradient(135deg, #2b3036 0%, #15181c 100%);
+  border-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+.real-cromo.shiny-foil::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.1) 0%,
+    rgba(255, 255, 255, 0.2) 30%,
+    rgba(0, 227, 255, 0.1) 50%,
+    rgba(255, 0, 128, 0.1) 70%,
+    rgba(255, 215, 0, 0.1) 100%
+  );
+  opacity: 0.7;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.real-cromo-badge {
+  font-size: 0.45rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 0.05rem 0.25rem;
+  border-radius: 2px;
+  background: var(--coke-red);
+  z-index: 2;
+  line-height: 1;
+}
+.real-cromo.shiny-foil .real-cromo-badge {
+  background: #ffd700;
+  color: #000;
+}
+.real-cromo-shield {
+  width: 80%;
+  height: 55%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.real-cromo-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  z-index: 2;
+}
+.real-cromo-flag {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+.real-cromo-name {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+  line-height: 1.2;
+}
+
+/* Pasting animations */
+.animate-paste {
+  animation: sticker-paste-anim 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes sticker-paste-anim {
+  0% {
+    transform: scale(2.2) rotate(15deg);
+    opacity: 0.2;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+  }
+  75% {
+    transform: scale(1.05) rotate(-2deg);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+  }
+  100% {
+    transform: scale(1) rotate(0.6deg); /* Paste slightly crooked for realism! */
+    opacity: 1;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+  }
+}
+
+/* Response and tablet scaling overrides */
+@media (max-width: 1000px) {
+  .album-book-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-height: none;
+  }
+  .album-book-container::before {
+    display: none;
+  }
+  .album-book-left {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+  }
+  .album-progress-box {
+    flex-direction: row;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+  }
+}
+@media (max-width: 960px) {
+  .matchups-horizontal-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 800px) {
+  .visual-showcase-container {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .visual-showcase-card {
+    padding: 1.5rem;
+  }
+}
+@media (max-width: 550px) {
+  .matchups-horizontal-row {
+    grid-template-columns: 1fr;
+  }
+  .album-book-left {
+    flex-direction: column;
+    text-align: center;
+  }
+  .cromo-album-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+  }
+}
+@media (max-width: 380px) {
+  .cromo-album-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ==========================================================================
+   B2C SOCCER CAMPAIGN (PROPOSAL B) - MICRO-SCALE 100VH OVERRIDES
+   ========================================================================== */
+
+/* Defensive styling to prevent SVG elements from ever stretching beyond their containers */
+.futbol-theme svg:not(.soccer-ball-svg) {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block;
+}
+
+/* Snap Scroll presentation for the Pitch Demo */
+.futbol-theme {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+.futbol-theme header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 60px !important;
+}
+
+.futbol-theme .header-container {
+  padding: 0.75rem 2rem !important;
+}
+.futbol-theme .screen-100vh {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: calc(100vh - 60px) !important;
+  height: auto !important;
+  max-height: none !important;
+  scroll-margin-top: 60px;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between !important;
+  padding: 2.5rem !important;
+  box-sizing: border-box;
+}
+
+/* Global Reset: Remove all border radius in the soccer theme */
+.futbol-theme * {
+  border-radius: 0 !important;
+}
+
+/* Screen 1: Hero & Showcase Overrides */
+.futbol-theme .hero-content {
+  margin-bottom: 0.4rem !important;
+}
+.futbol-theme .hero-content h1 {
+  font-size: 2.1rem !important; /* Slightly more compact to preserve vertical space */
+  margin-bottom: 0.2rem !important;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.futbol-theme .hero-content .hero-lead {
+  font-size: 0.95rem !important; /* Slightly more compact to preserve vertical space */
+  margin-bottom: 0.2rem !important;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+.futbol-theme .visual-showcase-card {
+  padding: 2.5rem !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: none !important;
+  height: auto !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.futbol-theme .visual-showcase-card:hover {
+  border-color: rgba(227, 6, 19, 0.35) !important;
+  box-shadow: 0 10px 40px rgba(227, 6, 19, 0.12), 0 12px 40px rgba(0, 0, 0, 0.6) !important;
+}
+.futbol-theme .visual-showcase-header {
+  margin-bottom: 0.6rem !important;
+  padding-bottom: 0.3rem !important;
+}
+.futbol-theme .visual-showcase-header h3 {
+  font-size: 1.4rem !important;
+  margin-top: 0.15rem !important;
+}
+.futbol-theme .visual-showcase-container {
+  display: flex !important;
+  gap: 3rem !important;
+  align-items: stretch !important;
+  height: 70vh !important; /* Force 70vh height */
+  min-height: 70vh !important;
+}
+.futbol-theme .visual-showcase-image-wrapper {
+  flex: 1.35 !important;
+  height: 70vh !important; /* Main image height 70vh */
+  min-height: 70vh !important;
+  max-height: 70vh !important;
+  aspect-ratio: 16 / 9 !important; /* Keep aspect ratio of mockup */
+  max-width: 62vw !important; /* Cap width to prevent horizontal overflow */
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+  background: #000;
+}
+.futbol-theme .showcase-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+.futbol-theme .visual-showcase-details {
+  flex: 0.65 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: auto !important;
+  min-height: 100% !important;
+  gap: 1.5rem !important; /* Larger gap to match 70vh image height */
+}
+.futbol-theme .visual-showcase-details h4 {
+  font-size: 1.25rem !important;
+  color: #fff;
+  font-weight: 700;
+}
+.futbol-theme .showcase-desc {
+  font-size: 0.9rem !important;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+.futbol-theme .matchup-scoreboard {
+  padding: 0.5rem 1rem !important;
+  margin: 0.4rem 0 !important;
+  background: rgba(10, 10, 12, 0.9) !important;
+}
+.futbol-theme .scoreboard-flag {
+  font-size: 2.1rem !important;
+}
+.futbol-theme .scoreboard-team-name {
+  font-size: 0.95rem !important;
+}
+.futbol-theme .scoreboard-votes {
+  font-size: 1.15rem !important;
+}
+
+/* Screen 2: Simulator matchups and album */
+.futbol-theme #demo-simulator {
+  justify-content: flex-start !important;
+  gap: 2rem !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: calc(100vh - 60px) !important;
+}
+.futbol-theme .matchups-horizontal-row {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 1.5rem !important;
+  margin-bottom: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: auto !important;
+}
+.futbol-theme .soccer-matchup-card {
+  height: auto !important;
+  padding: 1.25rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.futbol-theme .soccer-matchup-card:hover {
+  border-color: rgba(212, 175, 55, 0.4) !important;
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.12) !important;
+  transform: translateY(-4px) !important;
+}
+.futbol-theme .matchup-billboard-view {
+  width: 100% !important;
+  height: 350px !important; /* 2.5x height (was 140px) */
+  aspect-ratio: auto !important;
+  overflow: hidden;
+  background: #000;
+}
+.futbol-theme .matchup-bg-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+.futbol-theme .matchup-details {
+  padding-top: 0.75rem !important;
+  gap: 0.6rem !important;
+  flex: 1;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+.futbol-theme .matchup-title {
+  font-size: 1rem !important;
+  font-weight: 700;
+}
+.futbol-theme .matchup-scoreboard {
+  padding: 0.5rem !important;
+  border-radius: 8px;
+}
+.futbol-theme .scoreboard-flag {
+  font-size: 1.45rem !important;
+}
+.futbol-theme .scoreboard-team-name {
+  font-size: 0.75rem !important;
+}
+.futbol-theme .scoreboard-votes {
+  font-size: 0.95rem !important;
+}
+.futbol-theme .scoreboard-vs {
+  font-size: 0.7rem !important;
+  padding: 0.05rem 0.25rem !important;
+}
+.futbol-theme .btn-scan-option {
+  padding: 0.5rem 0 !important;
+  font-size: 0.8rem !important;
+  font-weight: 600;
+}
+
+/* Album Book Grid Overrides (Centered Open Book) */
+.futbol-theme .album-book-container {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 2.5rem !important;
+  padding: 2rem 2.5rem !important;
+  max-height: 48vh !important;
+  height: 48vh !important;
+  min-height: 380px !important;
+  border-radius: 20px !important;
+  align-self: center;
+  width: 100% !important;
+  display: grid !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.futbol-theme .album-book-container:hover {
+  border-color: rgba(212, 175, 55, 0.65) !important;
+  box-shadow: 0 15px 45px rgba(0,0,0,0.85), inset 0 0 25px rgba(212, 175, 55, 0.25) !important;
+}
+.futbol-theme .album-book-container::before {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 6px !important;
+  background: linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(255,255,255,0.08) 50%, rgba(0,0,0,0.6) 100%) !important;
+}
+.futbol-theme .album-book-left {
+  gap: 1.5rem !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding-right: 2rem !important;
+}
+.futbol-theme .album-book-right {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height: 100% !important;
+  padding-left: 2rem !important;
+}
+.futbol-theme .album-badge {
+  font-size: 0.72rem !important;
+  padding: 0.25rem 0.75rem !important;
+}
+.futbol-theme .album-cover-header h2 {
+  font-size: 1.7rem !important;
+  margin: 0.3rem 0 !important;
+}
+.futbol-theme .album-cover-header p {
+  font-size: 0.95rem !important;
+  line-height: 1.45;
+}
+.futbol-theme .album-progress-box {
+  padding: 0.8rem 1.5rem !important;
+  border-radius: 12px;
+  flex-direction: row !important;
+  gap: 2rem !important;
+  align-items: center;
+  justify-content: center !important;
+}
+.futbol-theme .counter-display {
+  font-size: 1.45rem !important;
+  padding: 0.45rem 1rem !important;
+  border-radius: 12px;
+}
+.futbol-theme .soccer-ball-svg {
+  width: 130px !important;
+  height: 130px !important;
+}
+.futbol-theme #album-status-label {
+  font-size: 0.8rem !important;
+  margin-top: 0.5rem !important;
+  align-self: center;
+}
+
+/* 2x5 slots grid (96px x 128px, +10% larger slots) */
+.futbol-theme .cromo-album-grid {
+  grid-template-columns: repeat(5, 96px) !important;
+  grid-template-rows: repeat(2, 128px) !important;
+  gap: 0.7rem !important;
+  justify-content: center !important;
+  align-content: center !important;
+}
+.futbol-theme .album-slot {
+  width: 96px !important;
+  height: 128px !important;
+  border-radius: 8px !important;
+  border-width: 1.5px !important;
+}
+.futbol-theme .album-slot-num {
+  font-size: 2.5rem !important;
+}
+.futbol-theme .album-slot-team-name {
+  font-size: 0.72rem !important;
+  bottom: 8px !important;
+}
+
+/* Cromo overrides inside the slots */
+.futbol-theme .real-cromo {
+  border: 3.5px solid #ffffff !important;
+  border-radius: 6px !important;
+  padding: 0.45rem 0.3rem !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease !important;
+}
+.futbol-theme .real-cromo:hover {
+  transform: scale(1.22) rotate(-1deg) !important;
+  z-index: 50 !important;
+  box-shadow: 0 12px 30px rgba(255,255,255,0.2) !important;
+}
+.futbol-theme .real-cromo-badge {
+  font-size: 8px !important;
+  padding: 1px 4px !important;
+  border-radius: 2px !important;
+}
+.futbol-theme .real-cromo-shield {
+  width: 75% !important;
+  height: 52% !important;
+}
+.futbol-theme .real-cromo-flag {
+  font-size: 1.4rem !important;
+}
+.futbol-theme .real-cromo-name {
+  font-size: 0.75rem !important;
+  max-width: 95% !important;
+}
+
+/* Screen 3: Analytics and Validation */
+.futbol-theme #analytics-validation {
+  justify-content: space-between !important;
+  gap: 2rem !important;
+}
+.futbol-theme .analytics-grid {
+  gap: 1.25rem !important;
+  margin-bottom: 0 !important;
+  height: 18vh !important;
+  max-height: 160px !important;
+  min-height: 125px !important;
+}
+.futbol-theme .stat-card {
+  padding: 1.25rem !important;
+  border-radius: 12px;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  height: 100% !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.futbol-theme .stat-card:hover {
+  border-color: rgba(212, 175, 55, 0.35) !important;
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.12) !important;
+  transform: translateY(-3px) !important;
+}
+.futbol-theme .stat-label {
+  font-size: 0.9rem !important;
+  margin-bottom: 0.4rem !important;
+}
+.futbol-theme .stat-value {
+  font-size: 1.95rem !important;
+  font-weight: 800;
+}
+.futbol-theme .stat-change {
+  font-size: 0.72rem !important;
+}
+.futbol-theme .validation-container {
+  padding: 2rem !important;
+  border-radius: 16px !important;
+  height: 46vh !important;
+  max-height: 480px !important;
+  min-height: 380px !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.futbol-theme .validation-container:hover {
+  border-color: rgba(212, 175, 55, 0.45) !important;
+  box-shadow: 0 12px 36px rgba(212, 175, 55, 0.1) !important;
+}
+.futbol-theme .validator-ui {
+  gap: 2rem !important;
+  height: 100% !important;
+}
+.futbol-theme .validator-screen {
+  padding: 1.25rem 1.75rem !important;
+  height: 100% !important;
+  justify-content: space-between !important;
+}
+.futbol-theme #validator-status {
+  font-size: 1.25rem !important;
+  margin: 0.6rem 0 !important;
+}
+.futbol-theme .validator-inputs {
+  gap: 0.8rem !important;
+}
+.futbol-theme .validator-inputs input {
+  padding: 0.6rem 1rem !important;
+  font-size: 0.95rem !important;
+  border-radius: 6px;
+}
+.futbol-theme .validator-inputs button {
+  padding: 0.6rem 1.2rem !important;
+  font-size: 0.95rem !important;
+  border-radius: 6px;
+}
+.futbol-theme .validation-message-box {
+  margin-top: 0.6rem !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.85rem !important;
+}
+.futbol-theme .validator-context {
+  font-size: 0.85rem !important;
+}
+
+/* Scanner Modal overrides */
+.futbol-theme .modal-dialog {
+  max-width: 350px !important;
+  padding: 1.25rem !important;
+  border-radius: 16px !important;
+}
+.futbol-theme .scanner-container {
+  gap: 0.8rem !important;
+}
+.futbol-theme .scanner-header h4 {
+  font-size: 1rem !important;
+}
+.futbol-theme .scanner-phone-frame {
+  width: 220px !important;
+  height: 320px !important;
+  border-radius: 24px !important;
+  padding: 8px !important;
+}
+.futbol-theme .scanner-aim-box {
+  width: 150px !important;
+  height: 150px !important;
+}
+.futbol-theme .qr-target-preview {
+  padding: 0.5rem !important;
+}
+.futbol-theme .qr-target-preview > div {
+  width: 130px !important;
+  height: 130px !important;
+  padding: 6px !important;
+}
+.futbol-theme .qr-target-preview > div > div {
+  width: 54px !important;
+  height: 54px !important;
+}
+.futbol-theme .scanner-info-text {
+  font-size: 0.78rem !important;
+}
+.futbol-theme .scanner-viewport-wrapper {
+  min-height: 330px !important;
+}
+.futbol-theme .success-title {
+  font-size: 1.45rem !important;
+}
+.futbol-theme .success-subtitle {
+  font-size: 0.85rem !important;
+}
+.futbol-theme .modal-billboard-container {
+  height: 190px !important;
+}
+.futbol-theme .modal-billboard-container .real-cromo {
+  width: 105px !important;
+  height: 140px !important;
+  border: 3px solid #ffffff !important;
+  border-radius: 6px !important;
+  padding: 0.4rem 0.25rem !important;
+}
+.futbol-theme .modal-billboard-container .real-cromo-flag {
+  font-size: 1.3rem !important;
+}
+.futbol-theme .modal-billboard-container .real-cromo-name {
+  font-size: 0.72rem !important;
+}
+.futbol-theme .progress-details-text {
+  font-size: 0.85rem !important;
+}
+
+/* Flying Sticker container size overrides */
+.futbol-theme #flying-sticker-effect {
+  position: absolute !important;
+  inset: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+/* Keyframes for pulse */
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
