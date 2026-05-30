@@ -1,218 +1,188 @@
-// JavaScript - Campaña Copa Taquera Publimex 2026
+// JavaScript - Guía del Sabor CDMX Publimex 2026
 // PUBLIMEX Digital OOH - Propuesta C: Impacto Social B2C
 
 // Global error handler for debugging in-browser errors
 window.onerror = function(message, source, lineno, colno, error) {
-  alert("GLOBAL JS ERROR: " + message + " at " + source + ":" + lineno + ":" + colno);
+  console.error("GLOBAL JS ERROR: " + message + " at " + source + ":" + lineno + ":" + colno);
   return false;
 };
 
 // --- 1. CONFIGURACIÓN Y ESTADO DE LA CAMPAÑA ---
-const TACO_CAMPAIGN_KEY = 'publimex_tacos_campaign_v2';
+const TACO_CAMPAIGN_KEY = 'publimex_tacos_campaign_v4';
 
 let state = {
-  scannedTeams: [], // Llaves de taquerías votadas (ej. 'compadre', 'cocuyos')
-  claimedAlbum: false,
-  validatedCodes: []
+  hasVoted: false,
+  votedTaqueria: '', // 'compadre', 'cocuyos', 'chupacabras', 'turix', 'manolo'
+  votedDetails: {
+    name: '',
+    email: '',
+    phone: ''
+  },
+  liveVotes: {
+    compadre: 18450,
+    cocuyos: 16120,
+    chupacabras: 15840,
+    turix: 14930,
+    manolo: 13750
+  }
 };
 
-// Detalle de las 10 taquerías de la CDMX
+// Detalle de las 5 taquerías de la CDMX
 const teams = {
   compadre: {
     name: 'Tacos El Compadre',
+    zone: 'Reforma',
     flag: '🌮',
-    code: 'COM',
-    primaryColor: '#dc2626', // Rojo
-    secondaryColor: '#facc15', // Oro
-    shiny: true, // Super estrella (mockup principal)
-    fact: 'Tradición y sabor al pastor en Reforma 222. ¡Un clásico del barrio!',
+    fact: 'Especialidad: Tacos al pastor. Su trompo gigante en Paseo de la Reforma es un ícono local. Abierto hasta las 3:00 AM.',
+    distance: 'A 22 km de Estadio Azteca. Acceso vía Metro Reforma / Metrobús.',
     baseVotes: 18450
-  },
-  borrego: {
-    name: 'El Borrego Viudo',
-    flag: '🌮',
-    code: 'BOR',
-    primaryColor: '#7c3aed', // Morado
-    secondaryColor: '#ffffff', // Blanco
-    shiny: false,
-    fact: 'Legendarios tacos al pastor en Tacubaya, servidos directo al auto 24/7.',
-    baseVotes: 12410
   },
   cocuyos: {
     name: 'Tacos Los Cocuyos',
+    zone: 'Polanco',
     flag: '🌮',
-    code: 'COC',
-    primaryColor: '#ea580c', // Naranja
-    secondaryColor: '#ffffff', // Blanco
-    shiny: true, // Super estrella (Polanco)
-    fact: 'Exquisitos tacos de suadero y cabeza en el Centro Histórico y Polanco.',
+    fact: 'Especialidad: Suadero y tripa. Famosos tacos con cocción lenta tradicional en choricera. Abierto 24 horas.',
+    distance: 'A 18 km de Estadio Azteca. Acceso directo por Metro Polanco.',
     baseVotes: 16120
   },
-  hola: {
-    name: 'Tacos Hola El Güero',
-    flag: '🌮',
-    code: 'GUE',
-    primaryColor: '#db2777', // Rosa
-    secondaryColor: '#ffffff', // Blanco
-    shiny: false,
-    fact: 'Guisados auténticos en la Condesa, el secreto mejor guardado de los locales.',
-    baseVotes: 11840
-  },
   chupacabras: {
-    name: 'El Chupacabras',
+    name: 'Tacos El Chupacabras',
+    zone: 'Roma',
     flag: '🌮',
-    code: 'CHU',
-    primaryColor: '#ca8a04', // Dorado Oscuro
-    secondaryColor: '#1e293b', // Gris oscuro
-    shiny: true, // Super estrella (Roma)
-    fact: 'Famosos tacos campechanos y barra ilimitada de salsas bajo el puente en Coyoacán.',
+    fact: 'Especialidad: Tacos campechanos. Una de las barras de salsas y guarniciones libres más famosas de la ciudad.',
+    distance: 'A 12 km de Estadio Azteca. Cerca de Av. Insurgentes Sur.',
     baseVotes: 15840
-  },
-  califa: {
-    name: 'Tacos El Califa',
-    flag: '🌮',
-    code: 'CAL',
-    primaryColor: '#0d9488', // Teal
-    secondaryColor: '#facc15', // Oro
-    shiny: false,
-    fact: 'Tacos gourmet de bistec y gaoneras con salsas de molcajete de alta calidad.',
-    baseVotes: 10980
   },
   turix: {
     name: 'Taquería El Turix',
+    zone: 'Condesa',
     flag: '🌮',
-    code: 'TUR',
-    primaryColor: '#16a34a', // Verde
-    secondaryColor: '#ffffff', // Blanco
-    shiny: true, // Super estrella (Condesa)
-    fact: 'Auténtica cochinita pibil de Yucatán en panuchos y tacos en la Condesa.',
+    fact: 'Especialidad: Cochinita Pibil yucateca. Famosos panuchos y tortas bañados en salsa de habanero tatemado.',
+    distance: 'A 15 km de Estadio Azteca. Cerca del Parque México.',
     baseVotes: 14930
-  },
-  orinoco: {
-    name: 'Taquería Orinoco',
-    flag: '🌮',
-    code: 'ORI',
-    primaryColor: '#e11d48', // Carmesí
-    secondaryColor: '#ffffff', // Blanco
-    shiny: false,
-    fact: 'Tacos estilo Monterrey de chicharrón norteño y trompo en la Roma Norte.',
-    baseVotes: 12890
   },
   manolo: {
     name: 'Tacos Manolo',
+    zone: 'Santa Fe',
     flag: '🌮',
-    code: 'MAN',
-    primaryColor: '#2563eb', // Azul
-    secondaryColor: '#ffffff', // Blanco
-    shiny: true, // Super estrella (Santa Fe)
-    fact: 'El sabor inigualable de las gringas Manolo y salsa de ajo en la Narvarte y Santa Fe.',
+    fact: 'Especialidad: El taco Manolo (bistec picado con tocino y cebolla) y gringas con aderezo secreto de ajo.',
+    distance: 'A 26 km de Estadio Azteca. Conexión rápida por Supervía Poniente.',
     baseVotes: 13750
-  },
-  huequito: {
-    name: 'Tacos El Huequito',
-    flag: '🌮',
-    code: 'HUE',
-    primaryColor: '#4f46e5', // Índigo
-    secondaryColor: '#ffffff', // Blanco
-    shiny: false,
-    fact: 'Pioneros en el pastor gourmet enrollado en el Centro desde 1959.',
-    baseVotes: 11950
   }
 };
 
-// Generar visual de sellos tradicionales de taquería
-function getShieldSVG(teamKey) {
-  const team = teams[teamKey];
-  const pCol = team.primaryColor;
-  const sCol = team.secondaryColor;
-
-  let details = '';
-
-  switch(teamKey) {
-    case 'compadre':
-      // Red plate with a golden chef hat
-      details = `
-        <circle cx="0" cy="0" r="16" fill="${pCol}" />
-        <path d="M-6,2 L6,2 L8,6 L-8,6 Z" fill="${sCol}" />
-        <path d="M-6,0 C-10,-4 -6,-10 0,-10 C6,-10 10,-4 6,0 Z" fill="#ffffff" />
-      `;
-      break;
-    case 'cocuyos':
-      // Taco shell with filling
-      details = `
-        <circle cx="0" cy="0" r="16" fill="${pCol}" />
-        <path d="M-10,0 C-10,-8 10,-8 10,0 Z" fill="#eab308" />
-        <circle cx="-3" cy="-3" r="2.5" fill="#15803d" />
-        <circle cx="3" cy="-2" r="2" fill="#b91c1c" />
-        <path d="M-11,1 L11,1 L11,3 L-11,3 Z" fill="#ffffff" />
-      `;
-      break;
-    case 'chupacabras':
-      // Mysterious eyes / creature silhouette
-      details = `
-        <circle cx="0" cy="0" r="16" fill="${pCol}" />
-        <path d="M-8,-4 L-2,-4 L-5,2 Z" fill="#10b981" />
-        <path d="M8,-4 L2,-4 L5,2 Z" fill="#10b981" />
-        <path d="M-8,6 Q0,12 8,6 Z" fill="#b91c1c" />
-      `;
-      break;
-    case 'turix':
-      // Green and white shield representing Yucatan
-      details = `
-        <rect x="-15" y="-15" width="30" height="30" fill="${pCol}" />
-        <path d="M-10,-10 L10,-10 L10,10 L-10,10 Z" fill="#ffffff" />
-        <circle cx="0" cy="0" r="6" fill="#eab308" />
-      `;
-      break;
-    case 'manolo':
-      // Blue plate with pastor trompo
-      details = `
-        <circle cx="0" cy="0" r="16" fill="${pCol}" />
-        <path d="M-8,-8 L8,-8 L4,6 L-4,6 Z" fill="#f97316" />
-        <path d="M-2,6 L2,6 L2,10 L-2,10 Z" fill="#78350f" />
-        <circle cx="0" cy="-10" r="3" fill="#eab308" />
-      `;
-      break;
-    default:
-      // A default taco shape inside a colored circle
-      details = `
-        <circle cx="0" cy="0" r="16" fill="${pCol}" />
-        <path d="M-8,2 C-8,-4 8,-4 8,2 Z" fill="#facc15" />
-        <circle cx="-2" cy="-1" r="1.5" fill="#16a34a" />
-        <circle cx="2" cy="-2" r="1.5" fill="#dc2626" />
-      `;
+// --- 2. PERSISTENCIA DE ESTADO ---
+function loadCampaignState() {
+  const localData = localStorage.getItem(TACO_CAMPAIGN_KEY);
+  if (localData) {
+    try {
+      const parsed = JSON.parse(localData);
+      if (parsed.hasVoted !== undefined) state.hasVoted = parsed.hasVoted;
+      if (parsed.votedTaqueria) state.votedTaqueria = parsed.votedTaqueria;
+      if (parsed.votedDetails) state.votedDetails = parsed.votedDetails;
+      if (parsed.liveVotes) state.liveVotes = parsed.liveVotes;
+    } catch(e) {
+      console.error('Error al parsear estado local:', e);
+    }
   }
-
-  return `
-    <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
-      <!-- Shield Base -->
-      <path d="M 50,5 C 80,5 95,12 95,45 C 95,78 50,95 50,95 C 50,95 5,78 5,45 C 5,12 20,5 50,5 Z" 
-            fill="#121214" stroke="${team.shiny ? '#ffd700' : 'rgba(255,255,255,0.15)'}" stroke-width="3" />
-      
-      <!-- Inner background plate -->
-      <path d="M 50,10 C 76,10 90,16 90,45 C 90,75 50,90 50,90 C 50,90 10,75 10,45 C 10,16 24,10 50,10 Z" 
-            fill="rgba(255,255,255,0.02)" />
-
-      <!-- Center Logo Details -->
-      <g transform="translate(50, 48) scale(1.8)">
-        ${details}
-      </g>
-      
-      <!-- Inner Shield Border -->
-      <path d="M 50,15 C 75,15 85,20 85,45 C 85,75 50,90 50,90 C 50,90 15,75 15,45 C 15,20 25,15 50,15 Z" 
-            fill="none" stroke="${team.shiny ? '#ffd700' : 'rgba(255,255,255,0.2)'}" stroke-width="2" />
-    </svg>
-  `;
 }
 
-// Generar visual de código QR de taquería para el escáner (diseño protagonista)
+function saveCampaignState() {
+  localStorage.setItem(TACO_CAMPAIGN_KEY, JSON.stringify(state));
+}
+
+// --- 3. AUDIO SINTETIZADO CON WEB AUDIO API ---
+function playTacoSound(type) {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const now = ctx.currentTime;
+    
+    if (type === 'whistle') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.linearRampToValueAtTime(0.2, now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.22);
+    } else if (type === 'stadium') {
+      const notes = [329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
+        gain.gain.setValueAtTime(0.08, now + (idx * 0.08));
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8 + (idx * 0.08));
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + (idx * 0.08));
+        osc.stop(now + 1.2);
+      });
+    }
+  } catch (e) {
+    console.warn('AudioContext no soportado o bloqueado por el navegador.', e);
+  }
+}
+
+// --- 4. MICRO-ANIMACIONES DE CELEBRACIÓN ---
+function triggerConfettiExplosion() {
+  const container = document.body;
+  const colors = ['#dc2626', '#facc15', '#16a34a', '#ffffff', '#2563eb'];
+  
+  for (let i = 0; i < 70; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti-piece';
+    confetti.style.position = 'fixed';
+    confetti.style.top = '-10px';
+    confetti.style.left = `${Math.random() * 100}vw`;
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.opacity = '0.85';
+    confetti.style.zIndex = '100000';
+    confetti.style.pointerEvents = 'none';
+    
+    const size = 6 + Math.random() * 8;
+    confetti.style.width = `${size}px`;
+    confetti.style.height = `${size}px`;
+    
+    const duration = 2.0 + Math.random() * 2.5;
+    confetti.style.transition = `transform ${duration}s linear, opacity ${duration}s ease-out`;
+    
+    container.appendChild(confetti);
+
+    // Trigger physical animation in DOM
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        confetti.style.transform = `translateY(105vh) rotate(${360 + Math.random() * 360}deg)`;
+        confetti.style.opacity = '0';
+      });
+    });
+
+    setTimeout(() => {
+      if (confetti.parentNode) {
+        confetti.parentNode.removeChild(confetti);
+      }
+    }, (duration + 0.5) * 1000);
+  }
+}
+
+// --- 5. QR VISUAL EN ESCÁNER ---
 function renderTeamQRInScanner(teamKey) {
   const container = document.getElementById('scanner-qr-display');
   if (!container) return;
   
   container.innerHTML = `
-    <div style="position: relative; width: 140px; height: 140px; background: #fff; padding: 8px; border-radius: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center;">
-      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; fill: #000; border-radius: 0;">
+    <div style="position: relative; width: 140px; height: 140px; background: #fff; padding: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center;">
+      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; fill: #000;">
         <rect x="0" y="0" width="22" height="22" />
         <rect x="2" y="2" width="18" height="18" fill="#fff" />
         <rect x="5" y="5" width="12" height="12" />
@@ -237,313 +207,75 @@ function renderTeamQRInScanner(teamKey) {
         <rect x="50" y="30" width="6" height="12" />
         <rect x="28" y="60" width="12" height="8" />
       </svg>
-      <div style="position: absolute; width: 56px; height: 56px; background: #fff; border-radius: 0; display: flex; align-items: center; justify-content: center; padding: 2px; box-shadow: 0 2px 10px rgba(0,0,0,0.35);">
-        ${getShieldSVG(teamKey)}
+      <div style="position: absolute; width: 44px; height: 44px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 2px; box-shadow: 0 2px 10px rgba(0,0,0,0.35); font-size: 1.5rem;">
+        🌮
       </div>
     </div>
   `;
 }
 
-// Generar código de pasaporte único
-function generateAlbumCode() {
-  const seed = (localStorage.getItem('publimex_tacos_seed') || Math.random().toString(36).substring(2, 6).toUpperCase());
-  localStorage.setItem('publimex_tacos_seed', seed);
-  return `PUBLIMEX-TACO-${seed}9`;
-}
-
-// --- 2. PERSISTENCIA DE ESTADO ---
-function loadCampaignState() {
-  const localData = localStorage.getItem(TACO_CAMPAIGN_KEY);
-  if (localData) {
-    try {
-      state = JSON.parse(localData);
-      if (!state.scannedTeams) state.scannedTeams = [];
-      if (state.claimedAlbum === undefined) state.claimedAlbum = false;
-      if (!state.validatedCodes) state.validatedCodes = [];
-    } catch(e) {
-      console.error('Error al parsear estado local:', e);
-    }
-  }
-}
-
-function saveCampaignState() {
-  localStorage.setItem(TACO_CAMPAIGN_KEY, JSON.stringify(state));
-}
-
-// --- 3. CONFIGURACIÓN DE AUDIO SINTETIZADO (Web Audio API) ---
-function playTacoSound(type) {
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    const ctx = new AudioContextClass();
-    const now = ctx.currentTime;
-    
-    if (type === 'whistle') {
-      // Bell chime/Chop sound when scanning starts
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(880, now);
-      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.2, now + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-      
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.22);
-    } else if (type === 'stadium') {
-      // Mexican jarabe-like chime / Triad arpeggio
-      const notes = [329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
-      notes.forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
-        gain.gain.setValueAtTime(0.08, now + (idx * 0.08));
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8 + (idx * 0.08));
-        
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now + (idx * 0.08));
-        osc.stop(now + 1.2);
-      });
-    } else if (type === 'paste') {
-      // Sticker pasting sound
-      const bufferSize = ctx.sampleRate * 0.15;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
-      
-      const noise = ctx.createBufferSource();
-      noise.buffer = buffer;
-      
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(750, now);
-      filter.Q.setValueAtTime(3.5, now);
-      
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.25, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
-      
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-      
-      noise.start(now);
-      noise.stop(now + 0.15);
-    } else if (type === 'error') {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(160, now);
-      osc.frequency.linearRampToValueAtTime(90, now + 0.25);
-      gain.gain.setValueAtTime(0.25, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-      
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.25);
-    }
-  } catch (e) {
-    console.warn('AudioContext no soportado o bloqueado por el navegador.', e);
-  }
-}
-
-// --- 4. ANIMACIONES ---
-function injectSoccerStyles() {
-  const style = document.createElement('style');
-  style.textContent = `
-    .confetti-piece {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      top: -10px;
-      opacity: 0.8;
-      border-radius: 0;
-      z-index: 1000;
-      animation: fall linear forwards;
-    }
-    @keyframes fall {
-      to {
-        transform: translateY(105vh) rotate(360deg);
-      }
-    }
-    .animate-paste {
-      animation: pasteFlash 0.5s ease-out;
-    }
-    @keyframes pasteFlash {
-      0% {
-        transform: scale(1.3) rotate(-5deg);
-        box-shadow: 0 0 40px rgba(239, 68, 68, 0.8);
-        filter: brightness(1.8);
-      }
-      100% {
-        transform: scale(1) rotate(0deg);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        filter: brightness(1);
-      }
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-function triggerConfettiExplosion() {
-  const container = document.body;
-  const colors = ['#dc2626', '#facc15', '#16a34a', '#ffffff', '#2563eb'];
-  
-  for (let i = 0; i < 70; i++) {
-    const confetti = document.createElement('div');
-    confetti.className = 'confetti-piece';
-    confetti.style.left = `${Math.random() * 100}vw`;
-    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    
-    const size = 6 + Math.random() * 8;
-    confetti.style.width = `${size}px`;
-    confetti.style.height = `${size}px`;
-    
-    const delay = Math.random() * 2.0;
-    confetti.style.animationDelay = `${delay}s`;
-    
-    const duration = 2.0 + Math.random() * 2.5;
-    confetti.style.animationDuration = `${duration}s`;
-    
-    container.appendChild(confetti);
-
-    setTimeout(() => {
-      if (confetti.parentNode) {
-        confetti.parentNode.removeChild(confetti);
-      }
-    }, (duration + delay) * 1000);
-  }
-}
-
-// --- 5. RENDERIZACIÓN DINÁMICA DEL PASAPORTE (2x5) ---
-function renderAlbumGrid() {
-  const grid = document.getElementById('album-cromo-grid');
-  if (!grid) return;
-
-  grid.innerHTML = '';
-  
-  const teamKeys = Object.keys(teams);
-  
-  teamKeys.forEach((key, index) => {
-    const team = teams[key];
-    const isUnlocked = state.scannedTeams.includes(key);
-    const numDisplay = String(index + 1).padStart(2, '0');
-    
-    // Crear ranura del pasaporte (hollow slot)
-    const slot = document.createElement('div');
-    slot.id = `slot-${key}`;
-    slot.className = 'album-slot';
-    slot.style.borderRadius = '0';
-    slot.innerHTML = `
-      <span class="album-slot-num">${numDisplay}</span>
-      <div class="album-slot-shield-placeholder">
-        ${getShieldSVG(key)}
-      </div>
-      <span class="album-slot-team-name">${team.name}</span>
-    `;
-
-    // Si ya está desbloqueado, pegarle el sello dorado real encima
-    if (isUnlocked) {
-      const cromo = document.createElement('div');
-      cromo.className = `real-cromo ${team.shiny ? 'shiny-foil' : ''}`;
-      cromo.style.borderRadius = '0';
-      
-      // Rotación estática para efecto realista
-      const rotationAngle = (index % 3 === 0) ? 0.7 : (index % 2 === 0) ? -0.5 : 0.3;
-      cromo.style.transform = `rotate(${rotationAngle}deg)`;
-      
-      cromo.innerHTML = `
-        <span class="real-cromo-badge" style="border-radius: 0;">${team.shiny ? '⭐ Gran Sello' : 'Sello'}</span>
-        <div class="real-cromo-shield">
-          ${getShieldSVG(key)}
-        </div>
-        <div class="real-cromo-footer">
-          <span class="real-cromo-flag">${team.flag}</span>
-          <span class="real-cromo-name">${team.name}</span>
-        </div>
-      `;
-      slot.appendChild(cromo);
-    } else {
-      // Click en la casilla vacía desplaza al espectacular correspondiente
-      slot.addEventListener('click', () => {
-        let billboardId = 'main';
-        if (key === 'compadre' || key === 'borrego') billboardId = 'main';
-        else if (key === 'cocuyos' || key === 'hola') billboardId = 2;
-        else if (key === 'chupacabras' || key === 'califa') billboardId = 3;
-        else if (key === 'turix' || key === 'orinoco') billboardId = 4;
-        else if (key === 'manolo' || key === 'huequito') billboardId = 5;
-
-        const targetId = billboardId === 'main' ? 'visual-showcase' : 'demo-simulator';
-        document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
-        
-        // Destello visual en el botón de la valla correspondiente
-        setTimeout(() => {
-          startSimulatedScan(key, billboardId);
-        }, 500);
-      });
-    }
-
-    grid.appendChild(slot);
-  });
-}
-
-// --- 6. SIMULACIÓN DE ESCANEO DE QR ---
+// --- 6. SIMULACIÓN DE ESCANEO DE QR (FLUJO DE 3 FASES) ---
 let activeScanningTeamKey = null;
 let activeScanningBillboardId = null;
 let scanTimeout = null;
-let scanSuccessTimeout = null;
-let hasRegisteredActiveScan = false;
 
 function startSimulatedScan(teamKey, billboardId) {
-  if (state.scannedTeams.includes(teamKey)) {
-    alert(`Ya has registrado tu voto y sello de ${teams[teamKey].name} en tu pasaporte.`);
+  console.log('startSimulatedScan called: team=' + teamKey + ', billboard=' + billboardId);
+  
+  if (state.hasVoted) {
+    alert('Ya has registrado tu voto por ' + (teams[state.votedTaqueria]?.name || 'una taquería') + '. Solo se permite un voto por usuario en la demo.');
     return;
   }
 
   activeScanningTeamKey = teamKey;
   activeScanningBillboardId = billboardId;
-  hasRegisteredActiveScan = false;
 
   const modal = document.getElementById('scanner-modal');
+  if (!modal) {
+    console.error('scanner-modal not found!');
+    return;
+  }
+
   const wrapper = document.getElementById('scanner-viewport-wrapper');
   const screenScan = modal.querySelector('.scanner-screen-scan');
+  const screenForm = document.getElementById('scanner-screen-form');
   const screenSuccess = modal.querySelector('.scanner-screen-success');
   const scanStatusText = document.getElementById('scanner-scan-status');
   const modalTitle = document.getElementById('scanner-modal-title');
   const modalFooter = document.getElementById('scanner-modal-footer');
 
-  // Ajustar apariencia brutalista sin border radius
+  // Reset all screens
   wrapper.className = 'scanner-viewport-wrapper state-scanning';
-  screenScan.classList.remove('hidden');
-  screenSuccess.classList.add('hidden');
-  modalTitle.textContent = 'SIMULANDO ESCANEO DE QR';
-  modalFooter.classList.remove('hidden');
+  if (screenScan) screenScan.classList.remove('hidden');
+  if (screenForm) screenForm.classList.add('hidden');
+  if (screenSuccess) screenSuccess.classList.add('hidden');
+  if (modalTitle) modalTitle.textContent = 'SIMULANDO ESCANEO DE QR';
+  if (modalFooter) modalFooter.classList.remove('hidden');
 
   const team = teams[teamKey];
-  scanStatusText.textContent = `Apuntando al QR de ${team.name} en el espectacular...`;
+  if (scanStatusText) {
+    scanStatusText.textContent = 'Apuntando al QR de ' + team.name + ' en el espectacular...';
+  }
 
-  // Dibujar el QR personalizado
   renderTeamQRInScanner(teamKey);
 
+  // Open modal
   modal.showModal();
+  console.log('Modal opened successfully');
   playTacoSound('whistle');
 
-  // Fase 1: Enfoque de cámara por 1.5 segundos
-  scanTimeout = setTimeout(() => {
+  // Phase 1: Camera scanning for 1.5 seconds → then show form
+  if (scanTimeout) clearTimeout(scanTimeout);
+  scanTimeout = setTimeout(function() {
     scanTimeout = null;
+    console.log('Scan phase complete, showing voting form');
     showVotingForm(teamKey);
   }, 1500);
 }
 
 function showVotingForm(teamKey) {
+  console.log('showVotingForm called: team=' + teamKey);
+  
   const modal = document.getElementById('scanner-modal');
   const wrapper = document.getElementById('scanner-viewport-wrapper');
   const screenScan = modal.querySelector('.scanner-screen-scan');
@@ -553,25 +285,30 @@ function showVotingForm(teamKey) {
   const modalFooter = document.getElementById('scanner-modal-footer');
 
   wrapper.className = 'scanner-viewport-wrapper state-form';
-  screenScan.classList.add('hidden');
+  if (screenScan) screenScan.classList.add('hidden');
   if (screenForm) screenForm.classList.remove('hidden');
-  screenSuccess.classList.add('hidden');
-  modalTitle.textContent = 'REGISTRO DE VOTO B2C';
-  modalFooter.classList.add('hidden');
+  if (screenSuccess) screenSuccess.classList.add('hidden');
+  if (modalTitle) modalTitle.textContent = 'REGISTRO DE VOTO B2C';
+  if (modalFooter) modalFooter.classList.add('hidden');
 
-  // Pre-seleccionar la taquería correspondiente al botón clickeado
+  // Pre-select the taquería corresponding to the clicked button
   const selectEl = document.getElementById('vote-taqueria-select');
   if (selectEl) {
     selectEl.value = teamKey;
   }
 
-  // Limpiar campos anteriores del formulario
-  document.getElementById('vote-user-name').value = '';
-  document.getElementById('vote-user-email').value = '';
-  document.getElementById('vote-user-phone').value = '';
+  // Clear previous form data
+  const nameEl = document.getElementById('vote-user-name');
+  const emailEl = document.getElementById('vote-user-email');
+  const phoneEl = document.getElementById('vote-user-phone');
+  if (nameEl) nameEl.value = '';
+  if (emailEl) emailEl.value = '';
+  if (phoneEl) phoneEl.value = '';
 }
 
 function showScanSuccess(teamKey) {
+  console.log('showScanSuccess called: team=' + teamKey);
+  
   const modal = document.getElementById('scanner-modal');
   const wrapper = document.getElementById('scanner-viewport-wrapper');
   const screenScan = modal.querySelector('.scanner-screen-scan');
@@ -581,138 +318,67 @@ function showScanSuccess(teamKey) {
   const modalFooter = document.getElementById('scanner-modal-footer');
 
   wrapper.className = 'scanner-viewport-wrapper state-success';
-  screenScan.classList.add('hidden');
+  if (screenScan) screenScan.classList.add('hidden');
   if (screenForm) screenForm.classList.add('hidden');
-  screenSuccess.classList.remove('hidden');
-  modalTitle.textContent = '¡VOTO Y SELLO REGISTRADO!';
-  modalFooter.classList.add('hidden');
+  if (screenSuccess) screenSuccess.classList.remove('hidden');
+  if (modalTitle) modalTitle.textContent = '¡VOTO REGISTRADO!';
+  if (modalFooter) modalFooter.classList.add('hidden');
 
   const team = teams[teamKey];
-  document.getElementById('scanner-success-location').textContent = team.fact;
-
-  // Llenar el visor con el sello de la taquería
-  const revealContainer = document.getElementById('modal-cromo-reveal');
-  revealContainer.className = 'modal-cromo-card';
-  revealContainer.style.borderRadius = '0';
-  
-  revealContainer.innerHTML = `
-    <div class="real-cromo ${team.shiny ? 'shiny-foil' : ''}" style="width:120px; height:160px; margin:0 auto; cursor:default; transform:rotate(-1deg); border-radius: 0;">
-      <span class="real-cromo-badge" style="border-radius: 0;">${team.shiny ? '⭐ Gran Sello' : 'Sello'}</span>
-      <div class="real-cromo-shield">
-        ${getShieldSVG(teamKey)}
-      </div>
-      <div class="real-cromo-footer">
-        <span class="real-cromo-flag">${team.flag}</span>
-        <span class="real-cromo-name">${team.name}</span>
-      </div>
-    </div>
-  `;
-
-  // Total acumulado
-  const currentTotal = state.scannedTeams.length + 1;
-  document.getElementById('modal-progress-text').textContent = `${currentTotal} / 10 Sellos`;
-
-  playTacoSound('stadium');
-}
-
-function triggerStickerPastingAnimation(teamKey, callback) {
-  const targetSlot = document.getElementById(`slot-${teamKey}`);
-  const revealCromo = document.querySelector('#modal-cromo-reveal .real-cromo');
-  const flyingSticker = document.getElementById('flying-sticker-effect');
-  
-  if (!targetSlot || !revealCromo || !flyingSticker) {
-    callback();
-    return;
+  const successLoc = document.getElementById('scanner-success-location');
+  if (successLoc) {
+    successLoc.textContent = 'Tu voto por ' + team.name + ' ha sido contabilizado exitosamente para la guía del Mundial.';
   }
 
-  // Obtener posiciones iniciales y finales absolutas en la página
-  const startRect = revealCromo.getBoundingClientRect();
-  const endRect = targetSlot.getBoundingClientRect();
+  // Draw confirmation card
+  const revealContainer = document.getElementById('modal-cromo-reveal');
+  if (revealContainer) {
+    revealContainer.innerHTML = `
+      <div style="background: rgba(220, 38, 38, 0.1); border: 2.5px solid #dc2626; padding: 0.8rem; text-align: center;">
+        <span style="font-size: 2.2rem; display: block; margin-bottom: 0.3rem;">🇲🇽 🌮 ⚽</span>
+        <h4 style="font-size: 0.85rem; color: #ffd700; margin: 0; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">¡Guía del Sabor Desbloqueada!</h4>
+        <p style="font-size: 0.72rem; color: #fff; margin: 0.25rem 0 0;">Has registrado tu voto por ${team.name} (${team.zone}).</p>
+      </div>
+    `;
+  }
 
-  const startLeft = startRect.left + window.scrollX;
-  const startTop = startRect.top + window.scrollY;
-  const endLeft = endRect.left + window.scrollX;
-  const endTop = endRect.top + window.scrollY;
-
-  // Clonar el sello
-  flyingSticker.innerHTML = revealCromo.innerHTML;
-  flyingSticker.className = `real-cromo ${teams[teamKey].shiny ? 'shiny-foil' : ''}`;
-  flyingSticker.style.borderRadius = '0';
-  
-  flyingSticker.style.position = 'absolute';
-  flyingSticker.style.left = `${startLeft}px`;
-  flyingSticker.style.top = `${startTop}px`;
-  flyingSticker.style.width = `${startRect.width}px`;
-  flyingSticker.style.height = `${startRect.height}px`;
-  flyingSticker.style.margin = '0';
-  flyingSticker.style.transform = 'scale(1) rotate(-1deg)';
-  flyingSticker.style.opacity = '1';
-  flyingSticker.classList.remove('hidden');
-
-  // Cerrar modal
-  document.getElementById('scanner-modal').close();
-
-  // Scroll al pasaporte
-  document.getElementById('demo-simulator').scrollIntoView({ behavior: 'smooth' });
-
-  // Iniciar transición
-  setTimeout(() => {
-    flyingSticker.style.transition = 'all 0.8s cubic-bezier(0.25, 1, 0.5, 1)';
-    flyingSticker.style.left = `${endLeft}px`;
-    flyingSticker.style.top = `${endTop}px`;
-    flyingSticker.style.width = `${endRect.width}px`;
-    flyingSticker.style.height = `${endRect.height}px`;
-    flyingSticker.style.transform = 'scale(1) rotate(0.6deg)';
-  }, 100);
-
-  // Finalizar animación
-  setTimeout(() => {
-    playTacoSound('paste');
-    
-    // Ocultar clon volador
-    flyingSticker.classList.add('hidden');
-    flyingSticker.style.transition = '';
-    
-    callback();
-
-    // Destello de sello pegado
-    const newlyPastedCromo = targetSlot.querySelector('.real-cromo');
-    if (newlyPastedCromo) {
-      newlyPastedCromo.classList.add('animate-paste');
-    }
-  }, 950);
+  playTacoSound('stadium');
+  triggerConfettiExplosion();
 }
 
 function finalizeScan() {
-  if (hasRegisteredActiveScan) return;
-  hasRegisteredActiveScan = true;
+  console.log('finalizeScan called');
+  
+  const modal = document.getElementById('scanner-modal');
+  if (modal && modal.open) {
+    modal.close();
+  }
 
+  // Save to state
   const teamKey = activeScanningTeamKey;
-  clearTimeoutsAndReset();
-
-  const registerStateChange = () => {
-    if (teamKey && !state.scannedTeams.includes(teamKey)) {
-      state.scannedTeams.push(teamKey);
-      saveCampaignState();
-      
-      renderAlbumGrid();
-      updateUI();
-      animateDashboardStats();
-
-      // Confeti de campeón si completa los 10 sellos
-      const count = state.scannedTeams.length;
-      if (count === 10) {
-        setTimeout(() => {
-          triggerConfettiExplosion();
-          playTacoSound('stadium');
-          openRewardModal();
-        }, 800);
-      }
+  if (teamKey && !state.hasVoted) {
+    state.hasVoted = true;
+    state.votedTaqueria = teamKey;
+    state.liveVotes[teamKey] = (state.liveVotes[teamKey] || 0) + 1;
+    
+    saveCampaignState();
+    
+    // Scroll to map section
+    const mapSection = document.getElementById('flavor-guide-dashboard');
+    if (mapSection) {
+      setTimeout(function() {
+        mapSection.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
     }
-  };
 
-  // Disparar animación
-  triggerStickerPastingAnimation(teamKey, registerStateChange);
+    // Unlock the map
+    unlockFlavorGuide(true);
+    
+    // Update billboard buttons
+    updateBillboardButtons();
+  }
+
+  clearTimeoutsAndReset();
 }
 
 function clearTimeoutsAndReset() {
@@ -720,149 +386,222 @@ function clearTimeoutsAndReset() {
     clearTimeout(scanTimeout);
     scanTimeout = null;
   }
-  if (scanSuccessTimeout) {
-    clearTimeout(scanSuccessTimeout);
-    scanSuccessTimeout = null;
-  }
   activeScanningTeamKey = null;
   activeScanningBillboardId = null;
-
-  // Reset modal screen visibilities
-  const modal = document.getElementById('scanner-modal');
-  if (modal) {
-    const screenScan = modal.querySelector('.scanner-screen-scan');
-    const screenForm = document.getElementById('scanner-screen-form');
-    const screenSuccess = modal.querySelector('.scanner-screen-success');
-    if (screenScan) screenScan.classList.remove('hidden');
-    if (screenForm) screenForm.classList.add('hidden');
-    if (screenSuccess) screenSuccess.classList.add('hidden');
-  }
 }
 
-// --- 7. APERTURA DE CUPÓN DE RECOMPENSA ---
-function openRewardModal() {
-  const code = generateAlbumCode();
-  
-  document.getElementById('reward-wallet-code').textContent = code;
-  document.getElementById('reward-wallet-barcode-txt').textContent = code;
-  
-  const modal = document.getElementById('reward-modal');
-  modal.showModal();
-}
-
-// --- 8. SINCRONIZACIÓN DE INTERFAZ (UI) ---
-function updateUI() {
-  const count = state.scannedTeams.length;
-  
-  // 1. Contador del pasaporte
-  const countDisplay = document.getElementById('cromos-count');
-  if (countDisplay) {
-    countDisplay.textContent = count;
-  }
-
-  // 2. Mover el progreso circular
-  const progressRing = document.getElementById('soccer-progress-ring');
-  if (progressRing) {
-    const percentage = count / 10;
-    const offset = 440 - (percentage * 440);
-    progressRing.style.strokeDashoffset = offset;
-  }
-
-  // 3. Etiqueta de estado del pasaporte
-  const statusLabel = document.getElementById('album-status-label');
-  if (statusLabel) {
-    if (count === 0) {
-      statusLabel.textContent = 'PASAPORTE VACÍO';
-      statusLabel.style.color = '#ef4444';
-    } else if (count > 0 && count < 10) {
-      statusLabel.textContent = `VOTADO ${count * 10}%`;
-      statusLabel.style.color = '#ffd700';
+// --- 7. INTERACTIVIDAD DEL MAPA Y ESTADÍSTICAS ---
+function unlockFlavorGuide(animate) {
+  const overlay = document.getElementById('map-lock-overlay');
+  if (overlay) {
+    if (overlay.style.display === 'none') return;
+    
+    if (animate) {
+      overlay.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+      overlay.style.opacity = '0';
+      overlay.style.transform = 'scale(0.96)';
+      overlay.style.pointerEvents = 'none';
+      setTimeout(function() {
+        overlay.style.display = 'none';
+      }, 600);
     } else {
-      statusLabel.textContent = '¡PASAPORTE COMPLETO!';
-      statusLabel.style.color = '#10b981';
-      statusLabel.style.textShadow = '0 0 10px rgba(16, 185, 129, 0.6)';
+      overlay.style.display = 'none';
     }
   }
 
-  // 4. Marcadores de votos en tiempo real en los espectaculares
-  Object.keys(teams).forEach(k => {
-    const votesDisplay = document.getElementById(`votes-${k}`);
-    if (votesDisplay) {
-      const isScanned = state.scannedTeams.includes(k);
-      const totalVotes = teams[k].baseVotes + (isScanned ? 1 : 0);
-      
-      // Manejar vistas de Reforma y filas de forma amigable
-      if (k === 'compadre' || k === 'borrego') {
-        votesDisplay.innerHTML = `${totalVotes.toLocaleString()} <span class="votes-label">votos</span>`;
-      } else {
-        votesDisplay.textContent = totalVotes.toLocaleString();
-      }
-      
-      if (isScanned) {
-        votesDisplay.style.color = '#10b981';
-      } else {
-        votesDisplay.style.color = '';
-      }
+  // Load ranking visualizations
+  updateRankingDisplay();
+
+  // Highlight the voted taquería or default (Compadre in Reforma)
+  const pinToHighlight = state.votedTaqueria || 'compadre';
+  selectMapPin(pinToHighlight);
+}
+
+function selectMapPin(key) {
+  const team = teams[key];
+  if (!team) return;
+
+  // Remove selection from all pins
+  document.querySelectorAll('.map-pin').forEach(function(pin) {
+    pin.classList.remove('selected');
+    const innerDot = pin.querySelector('circle:nth-child(2)');
+    if (innerDot) {
+      innerDot.setAttribute('r', '5');
     }
   });
 
-  // 5. Actualizar estado de deshabilitación de los botones de los espectaculares
-  updateMatchupCardStatus('main', ['compadre', 'borrego']);
-  updateMatchupCardStatus(2, ['cocuyos', 'hola']);
-  updateMatchupCardStatus(3, ['chupacabras', 'califa']);
-  updateMatchupCardStatus(4, ['turix', 'orinoco']);
-  updateMatchupCardStatus(5, ['manolo', 'huequito']);
+  // Highlight active pin
+  const activePin = document.getElementById('pin-' + key);
+  if (activePin) {
+    activePin.classList.add('selected');
+    const innerDot = activePin.querySelector('circle:nth-child(2)');
+    if (innerDot) {
+      innerDot.setAttribute('r', '7.5');
+    }
+  }
+
+  // Update tooltip card
+  const tooltipCard = document.getElementById('map-tooltip-card');
+  const titleEl = document.getElementById('tooltip-title');
+  const zoneEl = document.getElementById('tooltip-zone');
+  const factEl = document.getElementById('tooltip-fact');
+  const votesEl = document.getElementById('tooltip-votes');
+
+  if (tooltipCard && titleEl && zoneEl && factEl && votesEl) {
+    titleEl.textContent = team.name;
+    zoneEl.textContent = team.zone.toUpperCase();
+
+    // Change badge color per taquería
+    var badgeColor = '#dc2626';
+    if (key === 'cocuyos') badgeColor = '#eab308';
+    if (key === 'turix') badgeColor = '#16a34a';
+    if (key === 'chupacabras') badgeColor = '#ca8a04';
+    if (key === 'manolo') badgeColor = '#2563eb';
+    zoneEl.style.background = badgeColor;
+
+    factEl.innerHTML = team.fact + '<br><strong style="color: #ffd700; display: block; margin-top: 0.3rem;">🏟️ Estadio Azteca: ' + team.distance + '</strong>';
+    
+    var votesVal = state.liveVotes[key] || team.baseVotes;
+    votesEl.textContent = votesVal.toLocaleString();
+
+    tooltipCard.classList.remove('hidden');
+    tooltipCard.style.opacity = '1';
+    tooltipCard.style.transform = 'translateY(0)';
+    tooltipCard.style.pointerEvents = 'auto';
+  }
+
+  // Highlight matching ranking row
+  document.querySelectorAll('.ranking-row').forEach(function(row) {
+    row.classList.remove('active');
+    row.style.borderColor = 'rgba(255, 255, 255, 0.05)';
+    row.style.background = 'rgba(0, 0, 0, 0.2)';
+  });
+
+  var activeRow = document.getElementById('ranking-row-' + key);
+  if (activeRow) {
+    activeRow.classList.add('active');
+    var borderCol = 'rgba(220, 38, 38, 0.4)';
+    var bgCol = 'rgba(220, 38, 38, 0.05)';
+    if (key === 'cocuyos') { borderCol = 'rgba(234, 179, 8, 0.4)'; bgCol = 'rgba(234, 179, 8, 0.05)'; }
+    if (key === 'turix') { borderCol = 'rgba(22, 163, 74, 0.4)'; bgCol = 'rgba(22, 163, 74, 0.05)'; }
+    if (key === 'chupacabras') { borderCol = 'rgba(202, 138, 4, 0.4)'; bgCol = 'rgba(202, 138, 4, 0.05)'; }
+    if (key === 'manolo') { borderCol = 'rgba(37, 99, 235, 0.4)'; bgCol = 'rgba(37, 99, 235, 0.05)'; }
+
+    activeRow.style.borderColor = borderCol;
+    activeRow.style.background = bgCol;
+  }
+
+  // Update tourist tip
+  var tipContent = document.getElementById('tourist-tip-content');
+  if (tipContent) {
+    tipContent.innerHTML = '<strong>Guía del Mundial:</strong> ¿Vas al Estadio Azteca? El trayecto desde <strong>' + team.name + '</strong> (' + team.zone + ') es de aproximadamente <strong>' + team.distance + '</strong>. ¡Prueba su especialidad hoy!';
+  }
 }
 
-function updateMatchupCardStatus(cardId, teamKeys) {
-  const card = cardId === 'main' ? document.getElementById('visual-showcase') : document.getElementById(`match-card-${cardId}`);
-  if (!card) return;
+function updateRankingDisplay() {
+  var maxScaleVal = 20000;
+  var container = document.getElementById('ranking-list-container');
+  if (!container) return;
 
-  // Deshabilitar botones de escaneo para taquerías ya votadas
-  teamKeys.forEach(k => {
-    const btns = card.querySelectorAll(`.scan-trigger-btn[data-team="${k}"]`);
-    btns.forEach(btn => {
-      if (state.scannedTeams.includes(k)) {
-        btn.disabled = true;
-        btn.textContent = 'Votado 🌮';
-        btn.className = 'btn btn-secondary btn-xs btn-scan-option';
+  // Sort taquerías by votes descending
+  var sortedKeys = Object.keys(state.liveVotes).sort(function(a, b) {
+    return state.liveVotes[b] - state.liveVotes[a];
+  });
+  
+  container.innerHTML = '';
+
+  sortedKeys.forEach(function(key, index) {
+    var team = teams[key];
+    if (!team) return;
+
+    var rankNum = index + 1;
+    var votesVal = state.liveVotes[key];
+    
+    var barColor = '#dc2626';
+    var rankColor = '#ffd700'; // Gold for #1
+    if (rankNum === 2) { barColor = '#eab308'; rankColor = '#bbb'; }
+    if (rankNum === 3) { barColor = '#16a34a'; rankColor = '#92400e'; }
+    if (rankNum > 3) { barColor = '#2563eb'; rankColor = '#888'; }
+
+    var row = document.createElement('div');
+    row.id = 'ranking-row-' + key;
+    row.className = 'ranking-row' + (state.votedTaqueria === key ? ' user-voted-row' : '');
+    row.style.cssText = 'padding: 0.45rem 0.6rem; display: flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(0, 0, 0, 0.2); cursor: pointer; transition: all 0.2s;';
+
+    row.innerHTML = 
+      '<div class="ranking-num" style="font-size: 0.95rem; font-weight: 900; color: ' + rankColor + '; font-family: monospace; width: 18px;">' + rankNum + '</div>' +
+      '<div class="ranking-body" style="flex: 1;">' +
+        '<div style="display: flex; justify-content: space-between; font-size: 0.72rem; font-weight: bold; color: #fff; margin-bottom: 0.15rem;">' +
+          '<span>' + team.name + ' (' + team.zone + ') ' + (state.votedTaqueria === key ? '⭐' : '') + '</span>' +
+          '<span id="rank-votes-' + key + '" style="font-family: monospace; color: ' + rankColor + ';">' + votesVal.toLocaleString() + ' votos</span>' +
+        '</div>' +
+        '<div class="ranking-bar-track" style="height: 6px; background: rgba(255,255,255,0.06); width: 100%;">' +
+          '<div class="ranking-bar-fill" id="bar-fill-' + key + '" style="width: ' + ((votesVal / maxScaleVal) * 100) + '%; height: 100%; background: ' + barColor + '; transition: width 0.8s ease;"></div>' +
+        '</div>' +
+      '</div>';
+
+    row.addEventListener('click', function() {
+      selectMapPin(key);
+    });
+
+    container.appendChild(row);
+  });
+}
+
+function updateBillboardButtons() {
+  document.querySelectorAll('.scan-trigger-btn').forEach(function(btn) {
+    var teamKey = btn.getAttribute('data-team');
+    if (!teamKey) return;
+
+    if (state.hasVoted) {
+      btn.disabled = true;
+      if (state.votedTaqueria === teamKey) {
+        btn.textContent = '✅ Votado por ti 🌮';
+        btn.style.background = '#10b981';
+        btn.style.borderColor = '#10b981';
+        btn.style.color = '#fff';
       } else {
-        btn.disabled = false;
-        btn.textContent = `Votar ${teams[k].name.split(' ').slice(-1)}`;
-        
-        if (k === teamKeys[0]) {
-          btn.className = 'btn btn-primary btn-xs btn-scan-option';
-          btn.style.background = '#dc2626';
-          btn.style.borderColor = '#dc2626';
-          btn.style.color = '#fff';
-        } else {
-          btn.className = 'btn btn-secondary btn-xs btn-scan-option';
-          btn.style.background = '';
-          btn.style.borderColor = '';
-          btn.style.color = '';
+        btn.textContent = 'Voto Registrado 🔒';
+        btn.style.background = '#333';
+        btn.style.borderColor = '#333';
+        btn.style.color = '#777';
+      }
+    } else {
+      btn.disabled = false;
+      btn.style.background = '#dc2626';
+      btn.style.borderColor = '#dc2626';
+      btn.style.color = '#fff';
+      if (teamKey === 'compadre') {
+        btn.textContent = 'Escanear y Registrar Voto 🌮';
+      } else {
+        btn.textContent = 'Escanear y Votar 🌮';
+      }
+    }
+  });
+}
+
+// --- 8. DIALOG CLOSING (JS FALLBACK FOR CROSS-BROWSER) ---
+function setupDialogSafeClosing() {
+  // Close button handler (commandfor/command polyfill)
+  document.addEventListener('click', function(e) {
+    var closeBtn = e.target.closest('.modal-close-btn');
+    if (closeBtn) {
+      e.preventDefault();
+      var dialogId = closeBtn.getAttribute('commandfor');
+      if (dialogId) {
+        var dialog = document.getElementById(dialogId);
+        if (dialog && dialog.open) {
+          dialog.close();
         }
       }
-    });
-  });
-}
-
-// --- 9. CIERRE SEGURO DE MODALES ---
-function setupDialogSafeClosing() {
-  document.addEventListener('click', (e) => {
-    const closeBtn = e.target.closest('[command="close"]');
-    if (closeBtn) {
-      const dialogId = closeBtn.getAttribute('commandfor');
-      const dialog = document.getElementById(dialogId);
-      if (dialog) {
-        dialog.close();
-      }
     }
   });
 
-  document.querySelectorAll('dialog').forEach(dialog => {
-    dialog.addEventListener('click', (e) => {
-      const rect = dialog.getBoundingClientRect();
-      const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+  // Click outside dialog to close (backdrop click)
+  document.querySelectorAll('dialog').forEach(function(dialog) {
+    dialog.addEventListener('click', function(e) {
+      var rect = dialog.getBoundingClientRect();
+      var isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
         rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
       if (!isInDialog) {
         dialog.close();
@@ -871,125 +610,33 @@ function setupDialogSafeClosing() {
   });
 }
 
-// --- 10. SIMULADOR DE ANALÍTICAS EN VIVO ---
-function animateDashboardStats() {
-  const scansCount = state.scannedTeams.length;
-  const baseRegistrations = 87420 + (scansCount * 125);
-  const display = document.getElementById('stats-total-scans');
-  if (display) {
-    display.textContent = baseRegistrations.toLocaleString();
-  }
-
-  // Actualizar tabla de clasificación de votos en tiempo real (Top 5)
-  const chartTeams = ['compadre', 'cocuyos', 'chupacabras', 'turix', 'manolo'];
-  const maxScaleVal = 20000;
-
-  chartTeams.forEach(key => {
-    const isScanned = state.scannedTeams.includes(key);
-    const votesVal = teams[key].baseVotes + (isScanned ? 1 : 0);
-    
-    // Actualizar números de votos en la gráfica
-    const textEl = document.getElementById(`votes-${key}-chart`);
-    if (textEl) {
-      textEl.textContent = votesVal.toLocaleString();
-    }
-
-    // Actualizar barras de progreso
-    const fillEl = document.getElementById(`bar-fill-${key}`);
-    if (fillEl) {
-      const pct = (votesVal / maxScaleVal) * 100;
-      fillEl.style.width = `${pct}%`;
-      
-      // Efecto brillo si fue el último escaneo
-      const lastScanned = state.scannedTeams[scansCount - 1];
-      if (key === lastScanned) {
-        fillEl.style.filter = 'brightness(1.5) drop-shadow(0 0 8px currentColor)';
-        setTimeout(() => {
-          fillEl.style.filter = '';
-        }, 1500);
-      }
-    }
-  });
-}
-
-// --- 11. SIMULADOR DE CANJE DE PASAPORTE TAQUERO ---
-function validateAlbumCode() {
-  const input = document.getElementById('coupon-code-input');
-  const codeVal = input.value.trim().toUpperCase();
-  const msgBox = document.getElementById('validation-response');
-  const statusLabel = document.getElementById('validator-status');
-
-  if (!codeVal) {
-    showValidationError('Por favor ingresa un código de cupón.');
-    return;
-  }
-
-  // El código válido es el generado por el sistema
-  const systemCode = generateAlbumCode();
-
-  if (codeVal === systemCode) {
-    if (state.scannedTeams.length < 10) {
-      showValidationError('Código de pasaporte incompleto. Debes votar por las 10 taquerías para activar este cupón.');
-      return;
-    }
-
-    playTacoSound('stadium');
-    statusLabel.className = 'status-success-txt';
-    statusLabel.textContent = '¡CUPÓN VALIDADO!';
-    statusLabel.style.color = '#10b981';
-    
-    msgBox.className = 'validation-message-box success';
-    msgBox.style.background = 'rgba(16, 185, 129, 0.1)';
-    msgBox.style.border = '1px solid #10b981';
-    msgBox.style.color = '#10b981';
-    msgBox.innerHTML = `
-      <strong>¡Canje Exitoso!</strong><br>
-      Código del pasaporte certificado: <strong>${codeVal}</strong>.<br>
-      Se ha autorizado la entrega de: <strong>1 Orden de Tacos Gratis</strong> en la taquería ganadora.<br>
-      ¡Buen provecho! Disfruta del sabor del barrio.
-    `;
-    msgBox.classList.remove('hidden');
-    input.value = '';
-  } else {
-    showValidationError('Código de pasaporte inválido. Comprueba el formato de la promoción.');
-  }
-}
-
-function showValidationError(text) {
-  playTacoSound('error');
-  const statusLabel = document.getElementById('validator-status');
-  const msgBox = document.getElementById('validation-response');
-
-  statusLabel.className = 'status-error-txt';
-  statusLabel.textContent = '¡ERROR DE VALIDACIÓN!';
-  statusLabel.style.color = '#ef4444';
-  
-  msgBox.className = 'validation-message-box error';
-  msgBox.style.background = 'rgba(239, 68, 68, 0.1)';
-  msgBox.style.border = '1px solid #ef4444';
-  msgBox.style.color = '#ef4444';
-  msgBox.innerHTML = `<strong>Error:</strong> ${text}`;
-  msgBox.classList.remove('hidden');
-}
-
-// --- 12. MANEJADORES DE EVENTOS ---
+// --- 9. EVENT LISTENERS ---
 function setupEventListeners() {
-  // Adjuntar clics directos a los botones de escaneo
+  console.log('setupEventListeners: Initializing...');
+
+  // ===== DIRECT CLICK HANDLERS ON EACH SCAN BUTTON (BULLETPROOF) =====
   try {
-    const scanButtons = document.querySelectorAll('.scan-trigger-btn');
-    scanButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
+    var scanButtons = document.querySelectorAll('.scan-trigger-btn');
+    console.log('Found ' + scanButtons.length + ' scan-trigger-btn elements');
+    
+    scanButtons.forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         
-        const targetBtn = e.currentTarget;
-        if (targetBtn.disabled) return;
+        if (btn.disabled) {
+          console.log('Button is disabled, ignoring click');
+          return;
+        }
 
-        const teamKey = targetBtn.getAttribute('data-team');
-        const billboardId = targetBtn.getAttribute('data-billboard');
+        var teamKey = btn.getAttribute('data-team');
+        var billboardId = btn.getAttribute('data-billboard');
+        console.log('DIRECT click on scan button: team=' + teamKey + ', billboard=' + billboardId);
         
         if (teamKey && billboardId) {
           startSimulatedScan(teamKey, billboardId);
+        } else {
+          console.error('Missing data attributes on button:', btn);
         }
       });
     });
@@ -997,15 +644,14 @@ function setupEventListeners() {
     console.error('Error setting up direct click listeners:', err);
   }
 
-  // Delegation fallback
-  document.addEventListener('click', (e) => {
+  // ===== DELEGATED FALLBACK LISTENER =====
+  document.addEventListener('click', function(e) {
     try {
-      const scanBtn = e.target.closest('.scan-trigger-btn');
-      if (scanBtn) {
-        if (scanBtn.disabled) return;
-        
-        const teamKey = scanBtn.getAttribute('data-team');
-        const billboardId = scanBtn.getAttribute('data-billboard');
+      var scanBtn = e.target.closest('.scan-trigger-btn');
+      if (scanBtn && !scanBtn.disabled) {
+        var teamKey = scanBtn.getAttribute('data-team');
+        var billboardId = scanBtn.getAttribute('data-billboard');
+        console.log('DELEGATED click caught: team=' + teamKey + ', billboard=' + billboardId);
         
         if (teamKey && billboardId && activeScanningTeamKey !== teamKey) {
           startSimulatedScan(teamKey, billboardId);
@@ -1016,110 +662,146 @@ function setupEventListeners() {
     }
   });
 
-  const continueBtn = document.getElementById('modal-continue-btn');
-  if (continueBtn) {
-    continueBtn.addEventListener('click', () => {
-      finalizeScan();
-    });
-  }
-
-  const votingForm = document.getElementById('tacos-voting-form');
+  // ===== FORM SUBMIT HANDLER =====
+  var votingForm = document.getElementById('tacos-voting-form');
   if (votingForm) {
-    votingForm.addEventListener('submit', (e) => {
+    console.log('Attaching submit handler to voting form');
+    votingForm.addEventListener('submit', function(e) {
       e.preventDefault();
+      console.log('Form submitted');
       
-      const selectEl = document.getElementById('vote-taqueria-select');
-      const nameEl = document.getElementById('vote-user-name');
-      const emailEl = document.getElementById('vote-user-email');
-      const phoneEl = document.getElementById('vote-user-phone');
+      var selectEl = document.getElementById('vote-taqueria-select');
+      var nameEl = document.getElementById('vote-user-name');
+      var emailEl = document.getElementById('vote-user-email');
+      var phoneEl = document.getElementById('vote-user-phone');
 
-      if (!selectEl || !nameEl || !emailEl || !phoneEl) return;
+      if (!selectEl || !nameEl || !emailEl || !phoneEl) {
+        console.error('Form elements not found');
+        return;
+      }
 
-      const taqueriaKey = selectEl.value;
-      const userName = nameEl.value.trim();
-      const userEmail = emailEl.value.trim();
-      const userPhone = phoneEl.value.trim();
+      var taqueriaKey = selectEl.value;
+      var userName = nameEl.value.trim();
+      var userEmail = emailEl.value.trim();
+      var userPhone = phoneEl.value.trim();
 
       if (!userName || !userEmail || !userPhone) {
         alert('Por favor completa todos los campos del formulario.');
         return;
       }
 
-      // Voto registrado correctamente
-      // Ocultar formulario
-      const screenForm = document.getElementById('scanner-screen-form');
-      if (screenForm) {
-        screenForm.classList.add('hidden');
-      }
-
-      // Actualizar clave escaneada activa (en caso de que hayan cambiado la selección en el dropdown!)
+      // Save vote details
+      state.votedDetails = {
+        name: userName,
+        email: userEmail,
+        phone: userPhone
+      };
+      
+      // Update active scan key if they changed dropdown
       activeScanningTeamKey = taqueriaKey;
 
+      console.log('Vote submitted for: ' + taqueriaKey);
       showScanSuccess(taqueriaKey);
     });
+  } else {
+    console.error('tacos-voting-form not found!');
   }
 
-  const scannerModal = document.getElementById('scanner-modal');
+  // ===== "REVEAL MAP" CONTINUE BUTTON =====
+  var continueBtn = document.getElementById('modal-continue-btn');
+  if (continueBtn) {
+    console.log('Attaching click handler to continue button');
+    continueBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('Continue button clicked — finalizing scan');
+      finalizeScan();
+    });
+  }
+
+  // ===== SCANNER MODAL CLOSE HANDLER =====
+  var scannerModal = document.getElementById('scanner-modal');
   if (scannerModal) {
-    scannerModal.addEventListener('close', () => {
-      if (activeScanningTeamKey) {
-        clearTimeoutsAndReset();
+    scannerModal.addEventListener('close', function() {
+      console.log('Scanner modal closed');
+      if (scanTimeout) {
+        clearTimeout(scanTimeout);
+        scanTimeout = null;
       }
     });
   }
 
-  const saveWalletBtn = document.getElementById('save-wallet-action');
-  if (saveWalletBtn) {
-    saveWalletBtn.addEventListener('click', () => {
-      const codeLabel = document.getElementById('reward-wallet-code').textContent;
-      document.getElementById('reward-modal').close();
-      
-      const valInput = document.getElementById('coupon-code-input');
-      if (valInput) {
-        valInput.value = codeLabel;
-        valInput.focus();
-        document.getElementById('analytics-validation').scrollIntoView({ behavior: 'smooth' });
+  // ===== INTERACTIVE MAP PINS =====
+  document.querySelectorAll('.map-pin').forEach(function(pin) {
+    pin.addEventListener('click', function() {
+      var pinId = pin.getAttribute('id');
+      if (pinId) {
+        var key = pinId.replace('pin-', '');
+        selectMapPin(key);
       }
     });
-  }
+  });
 
-  const validateBtn = document.getElementById('validate-coupon-btn');
-  if (validateBtn) {
-    validateBtn.addEventListener('click', validateAlbumCode);
-  }
-
-  const resetBtn = document.getElementById('reset-campaign');
+  // ===== RESET CAMPAIGN BUTTON =====
+  var resetBtn = document.getElementById('reset-campaign');
   if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      if (confirm('¿Deseas vaciar tu pasaporte de taquerías y reiniciar la simulación?')) {
-        state.scannedTeams = [];
-        state.claimedAlbum = false;
-        state.validatedCodes = [];
+    resetBtn.addEventListener('click', function() {
+      if (confirm('¿Deseas reiniciar la simulación de votación y volver a bloquear la Guía del Sabor?')) {
+        state.hasVoted = false;
+        state.votedTaqueria = '';
+        state.votedDetails = { name: '', email: '', phone: '' };
+        state.liveVotes = {
+          compadre: 18450,
+          cocuyos: 16120,
+          chupacabras: 15840,
+          turix: 14930,
+          manolo: 13750
+        };
+        
         saveCampaignState();
         
-        document.getElementById('coupon-code-input').value = '';
-        document.getElementById('validator-status').className = 'status-waiting';
-        document.getElementById('validator-status').textContent = 'Esperando Código de Pasaporte Lleno...';
-        document.getElementById('validator-status').style.color = '';
-        document.getElementById('validation-response').classList.add('hidden');
+        // Re-lock map
+        var overlay = document.getElementById('map-lock-overlay');
+        if (overlay) {
+          overlay.style.display = 'flex';
+          overlay.style.opacity = '1';
+          overlay.style.transform = '';
+          overlay.style.pointerEvents = 'auto';
+        }
+
+        // Hide tooltip
+        var tooltip = document.getElementById('map-tooltip-card');
+        if (tooltip) {
+          tooltip.classList.add('hidden');
+          tooltip.style.opacity = '0';
+        }
+
+        updateRankingDisplay();
+        updateBillboardButtons();
         
-        renderAlbumGrid();
-        updateUI();
-        animateDashboardStats();
+        console.log('Campaign reset complete');
       }
     });
   }
+
+  console.log('setupEventListeners: Complete');
 }
 
-// --- 13. INICIALIZACIÓN ---
-document.addEventListener('DOMContentLoaded', () => {
-  injectSoccerStyles();
+// --- 10. INITIALIZATION ---
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOMContentLoaded: Initializing Guía del Sabor CDMX');
+  
   loadCampaignState();
   
-  renderAlbumGrid();
-  updateUI();
-  animateDashboardStats();
+  updateRankingDisplay();
+  updateBillboardButtons();
+  
+  if (state.hasVoted) {
+    // Unlock immediately if already voted (persistence)
+    unlockFlavorGuide(false);
+  }
   
   setupEventListeners();
   setupDialogSafeClosing();
+  
+  console.log('Initialization complete. hasVoted=' + state.hasVoted + ', votedTaqueria=' + state.votedTaqueria);
 });
