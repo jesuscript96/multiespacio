@@ -2593,3 +2593,612 @@ footer {
   }
 }
 
+/* ==========================================================================
+   B2C TACOS CAMPAIGN (PROPOSAL C) - COPA TAQUERA 2026 OVERRIDES
+   ========================================================================== */
+
+.tacos-theme svg:not(.soccer-ball-svg) {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block;
+}
+
+/* Snap Scroll presentation */
+.tacos-theme {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+  max-height: 100vh;
+  background-color: #0c0b0b !important;
+  color: #f3f4f6 !important;
+}
+
+.tacos-theme header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 60px !important;
+  background: rgba(12, 11, 11, 0.85) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(220, 38, 38, 0.25) !important;
+}
+
+.tacos-theme .header-container {
+  padding: 0.75rem 2rem !important;
+}
+
+.tacos-theme .screen-100vh {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: calc(100vh - 60px) !important;
+  height: auto !important;
+  max-height: none !important;
+  scroll-margin-top: 60px;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between !important;
+  padding: 2.5rem !important;
+  box-sizing: border-box;
+}
+
+/* Force all elements to have 0 border-radius */
+.tacos-theme * {
+  border-radius: 0 !important;
+}
+
+.tacos-theme .hero-content h1 {
+  font-size: 2.1rem !important;
+  margin-bottom: 0.2rem !important;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #ffffff !important;
+}
+
+.tacos-theme .hero-content .hero-lead {
+  font-size: 0.95rem !important;
+  margin-bottom: 0.2rem !important;
+  line-height: 1.35;
+  color: #a3a3a3 !important;
+}
+
+.tacos-theme .visual-showcase-card {
+  padding: 2.5rem !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: none !important;
+  height: auto !important;
+  background: rgba(220, 38, 38, 0.03) !important;
+  border: 1px solid rgba(220, 38, 38, 0.2) !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tacos-theme .visual-showcase-card:hover {
+  border-color: rgba(220, 38, 38, 0.55) !important;
+  box-shadow: 0 10px 40px rgba(220, 38, 38, 0.15), 0 12px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+.tacos-theme .visual-showcase-container {
+  display: flex !important;
+  gap: 3rem !important;
+  align-items: stretch !important;
+  height: 70vh !important;
+  min-height: 70vh !important;
+}
+
+.tacos-theme .visual-showcase-image-wrapper {
+  flex: 1.35 !important;
+  height: 70vh !important;
+  min-height: 70vh !important;
+  max-height: 70vh !important;
+  aspect-ratio: 16 / 9 !important;
+  max-width: 62vw !important;
+  overflow: hidden;
+  border: 1px solid rgba(220, 38, 38, 0.25) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+  background: #000;
+}
+
+.tacos-theme .showcase-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+.tacos-theme .visual-showcase-details {
+  flex: 0.65 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: auto !important;
+  min-height: 100% !important;
+  gap: 1.5rem !important;
+}
+
+.tacos-theme .visual-showcase-details h4 {
+  font-size: 1.25rem !important;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.tacos-theme .showcase-desc {
+  font-size: 0.9rem !important;
+  line-height: 1.4;
+  color: #a3a3a3 !important;
+}
+
+.tacos-theme .matchup-scoreboard {
+  padding: 0.5rem 1rem !important;
+  margin: 0.4rem 0 !important;
+  background: rgba(220, 38, 38, 0.08) !important;
+  border: 1px solid rgba(220, 38, 38, 0.3) !important;
+}
+
+.tacos-theme .scoreboard-flag {
+  font-size: 2.1rem !important;
+}
+
+.tacos-theme .scoreboard-team-name {
+  font-size: 0.95rem !important;
+}
+
+.tacos-theme .scoreboard-votes {
+  font-size: 1.15rem !important;
+  color: #facc15 !important;
+}
+
+/* Screen 2: Simulator matchups & pasaporte */
+.tacos-theme #demo-simulator {
+  justify-content: flex-start !important;
+  gap: 2rem !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: calc(100vh - 60px) !important;
+}
+
+.tacos-theme .matchups-horizontal-row {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 1.5rem !important;
+  margin-bottom: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: auto !important;
+}
+
+.tacos-theme .soccer-matchup-card {
+  height: auto !important;
+  padding: 1.25rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.tacos-theme .soccer-matchup-card:hover {
+  border-color: rgba(234, 179, 8, 0.4) !important;
+  box-shadow: 0 10px 30px rgba(234, 179, 8, 0.12) !important;
+  transform: translateY(-4px) !important;
+}
+
+.tacos-theme .matchup-billboard-view {
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  height: auto !important;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.tacos-theme .matchup-bg-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+.tacos-theme .matchup-details {
+  padding-top: 0.75rem !important;
+  gap: 0.6rem !important;
+  flex: 1;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+.tacos-theme .matchup-title {
+  font-size: 1rem !important;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.tacos-theme .matchup-scoreboard {
+  padding: 0.5rem !important;
+  background: rgba(220, 38, 38, 0.05) !important;
+  border: 1px solid rgba(220, 38, 38, 0.2) !important;
+}
+
+.tacos-theme .scoreboard-flag {
+  font-size: 1.45rem !important;
+}
+
+.tacos-theme .scoreboard-team-name {
+  font-size: 0.75rem !important;
+}
+
+.tacos-theme .scoreboard-votes {
+  font-size: 0.95rem !important;
+}
+
+.tacos-theme .scoreboard-vs {
+  font-size: 0.7rem !important;
+  color: #ef4444 !important;
+  padding: 0.05rem 0.25rem !important;
+}
+
+.tacos-theme .btn-scan-option {
+  padding: 0.5rem 0 !important;
+  font-size: 0.8rem !important;
+  font-weight: 600;
+}
+
+/* Pasaporte Book Grid Overrides (Open Book Style) */
+.tacos-theme .album-book-container {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 2.5rem !important;
+  padding: 2rem 2.5rem !important;
+  max-height: 48vh !important;
+  height: 48vh !important;
+  min-height: 380px !important;
+  background: rgba(220, 38, 38, 0.02) !important;
+  border: 1px solid rgba(220, 38, 38, 0.15) !important;
+  align-self: center;
+  width: 100% !important;
+  display: grid !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tacos-theme .album-book-container:hover {
+  border-color: rgba(234, 179, 8, 0.5) !important;
+  box-shadow: 0 15px 45px rgba(0,0,0,0.85), inset 0 0 25px rgba(234, 179, 8, 0.1) !important;
+}
+
+.tacos-theme .album-book-container::before {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 6px !important;
+  background: linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(255,255,255,0.08) 50%, rgba(0,0,0,0.6) 100%) !important;
+}
+
+.tacos-theme .album-book-left {
+  gap: 1.5rem !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding-right: 2rem !important;
+}
+
+.tacos-theme .album-book-right {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height: 100% !important;
+  padding-left: 2rem !important;
+}
+
+.tacos-theme .album-badge {
+  font-size: 0.72rem !important;
+  padding: 0.25rem 0.75rem !important;
+}
+
+.tacos-theme .album-cover-header h2 {
+  font-size: 1.7rem !important;
+  margin: 0.3rem 0 !important;
+  color: #ffffff;
+}
+
+.tacos-theme .album-cover-header p {
+  font-size: 0.95rem !important;
+  line-height: 1.45;
+}
+
+.tacos-theme .album-progress-box {
+  padding: 0.8rem 1.5rem !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  flex-direction: row !important;
+  gap: 2rem !important;
+  align-items: center;
+  justify-content: center !important;
+}
+
+.tacos-theme .counter-display {
+  font-size: 1.45rem !important;
+  padding: 0.45rem 1rem !important;
+  background: rgba(220, 38, 38, 0.1) !important;
+  border: 1px solid rgba(220, 38, 38, 0.3) !important;
+  color: #ef4444 !important;
+}
+
+.tacos-theme .soccer-ball-svg {
+  width: 130px !important;
+  height: 130px !important;
+}
+
+.tacos-theme #album-status-label {
+  font-size: 0.8rem !important;
+  margin-top: 0.5rem !important;
+  align-self: center;
+}
+
+/* 2x5 slots grid */
+.tacos-theme .cromo-album-grid {
+  grid-template-columns: repeat(5, 96px) !important;
+  grid-template-rows: repeat(2, 128px) !important;
+  gap: 0.7rem !important;
+  justify-content: center !important;
+  align-content: center !important;
+}
+
+.tacos-theme .album-slot {
+  width: 96px !important;
+  height: 128px !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1.5px dashed rgba(220, 38, 38, 0.4) !important;
+}
+
+.tacos-theme .album-slot-num {
+  font-size: 2.5rem !important;
+  color: rgba(220, 38, 38, 0.15) !important;
+}
+
+.tacos-theme .album-slot-team-name {
+  font-size: 0.72rem !important;
+  bottom: 8px !important;
+  color: #888 !important;
+}
+
+/* Sello / Cromo overrides inside the slots */
+.tacos-theme .real-cromo {
+  border: 3.5px solid #ffffff !important;
+  background: #18181b !important;
+  padding: 0.45rem 0.3rem !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease !important;
+}
+
+.tacos-theme .real-cromo:hover {
+  transform: scale(1.22) rotate(-1deg) !important;
+  z-index: 50 !important;
+  box-shadow: 0 12px 30px rgba(255, 255, 255, 0.1) !important;
+}
+
+.tacos-theme .real-cromo-badge {
+  font-size: 8px !important;
+  background: #dc2626 !important;
+  color: white !important;
+  padding: 1px 4px !important;
+}
+
+.tacos-theme .real-cromo-shield {
+  width: 75% !important;
+  height: 52% !important;
+}
+
+.tacos-theme .real-cromo-flag {
+  font-size: 1.4rem !important;
+}
+
+.tacos-theme .real-cromo-name {
+  font-size: 0.75rem !important;
+  max-width: 95% !important;
+  color: #fff !important;
+}
+
+/* Screen 3: Analytics & Validation */
+.tacos-theme #analytics-validation {
+  justify-content: space-between !important;
+  gap: 2rem !important;
+}
+
+.tacos-theme .analytics-grid {
+  gap: 1.25rem !important;
+  margin-bottom: 0 !important;
+  height: 18vh !important;
+  max-height: 160px !important;
+  min-height: 125px !important;
+}
+
+.tacos-theme .stat-card {
+  padding: 1.25rem !important;
+  background: rgba(220, 38, 38, 0.02) !important;
+  border: 1px solid rgba(220, 38, 38, 0.15) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  height: 100% !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.tacos-theme .stat-card:hover {
+  border-color: rgba(234, 179, 8, 0.35) !important;
+  box-shadow: 0 10px 30px rgba(234, 179, 8, 0.12) !important;
+  transform: translateY(-3px) !important;
+}
+
+.tacos-theme .stat-label {
+  font-size: 0.9rem !important;
+  margin-bottom: 0.4rem !important;
+}
+
+.tacos-theme .stat-value {
+  font-size: 1.95rem !important;
+  font-weight: 800;
+}
+
+.tacos-theme .stat-change {
+  font-size: 0.72rem !important;
+}
+
+.tacos-theme .validation-container {
+  padding: 2rem !important;
+  background: rgba(220, 38, 38, 0.01) !important;
+  border: 1px solid rgba(220, 38, 38, 0.2) !important;
+  height: 46vh !important;
+  max-height: 480px !important;
+  min-height: 380px !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tacos-theme .validation-container:hover {
+  border-color: rgba(220, 38, 38, 0.4) !important;
+  box-shadow: 0 12px 36px rgba(220, 38, 38, 0.1) !important;
+}
+
+.tacos-theme .validator-ui {
+  gap: 2rem !important;
+  height: 100% !important;
+}
+
+.tacos-theme .validator-screen {
+  padding: 1.25rem 1.75rem !important;
+  height: 100% !important;
+  justify-content: space-between !important;
+}
+
+.tacos-theme #validator-status {
+  font-size: 1.25rem !important;
+  margin: 0.6rem 0 !important;
+}
+
+.tacos-theme .validator-inputs {
+  gap: 0.8rem !important;
+}
+
+.tacos-theme .validator-inputs input {
+  padding: 0.6rem 1rem !important;
+  font-size: 0.95rem !important;
+}
+
+.tacos-theme .validator-inputs button {
+  padding: 0.6rem 1.2rem !important;
+  font-size: 0.95rem !important;
+}
+
+.tacos-theme .validation-message-box {
+  margin-top: 0.6rem !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.85rem !important;
+}
+
+.tacos-theme .validator-context {
+  font-size: 0.85rem !important;
+}
+
+/* Scanner Modal overrides */
+.tacos-theme .modal-dialog {
+  max-width: 350px !important;
+  padding: 1.25rem !important;
+  background: #0f0e0e !important;
+  border: 2px solid #dc2626 !important;
+}
+
+.tacos-theme .scanner-container {
+  gap: 0.8rem !important;
+}
+
+.tacos-theme .scanner-header h4 {
+  font-size: 1rem !important;
+  color: #ffffff;
+}
+
+.tacos-theme .scanner-phone-frame {
+  width: 220px !important;
+  height: 320px !important;
+  padding: 8px !important;
+  background: #18181b !important;
+  border: 2px solid #2d2d30 !important;
+}
+
+.tacos-theme .scanner-aim-box {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.tacos-theme .qr-target-preview {
+  padding: 0.5rem !important;
+}
+
+.tacos-theme .qr-target-preview > div {
+  width: 130px !important;
+  height: 130px !important;
+  padding: 6px !important;
+}
+
+.tacos-theme .qr-target-preview > div > div {
+  width: 54px !important;
+  height: 54px !important;
+}
+
+.tacos-theme .scanner-info-text {
+  font-size: 0.78rem !important;
+  color: #a3a3a3;
+}
+
+.tacos-theme .scanner-viewport-wrapper {
+  min-height: 330px !important;
+}
+
+.tacos-theme .success-title {
+  font-size: 1.45rem !important;
+}
+
+.tacos-theme .success-subtitle {
+  font-size: 0.85rem !important;
+}
+
+.tacos-theme .modal-billboard-container {
+  height: 190px !important;
+}
+
+.tacos-theme .modal-billboard-container .real-cromo {
+  width: 105px !important;
+  height: 140px !important;
+  border: 3px solid #ffffff !important;
+  padding: 0.4rem 0.25rem !important;
+}
+
+.tacos-theme .modal-billboard-container .real-cromo-flag {
+  font-size: 1.3rem !important;
+}
+
+.tacos-theme .modal-billboard-container .real-cromo-name {
+  font-size: 0.72rem !important;
+}
+
+.tacos-theme .progress-details-text {
+  font-size: 0.85rem !important;
+}
+
+/* Flying Sticker container size overrides */
+.tacos-theme #flying-sticker-effect {
+  position: absolute !important;
+  inset: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  pointer-events: none;
+  z-index: 10000;
+}
