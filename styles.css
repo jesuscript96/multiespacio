@@ -2241,8 +2241,8 @@ footer {
 }
 .futbol-theme .matchup-billboard-view {
   width: 100% !important;
-  height: 350px !important; /* 2.5x height (was 140px) */
-  aspect-ratio: auto !important;
+  aspect-ratio: 16 / 9 !important; /* Force correct horizontal aspect ratio */
+  height: auto !important;
   overflow: hidden;
   background: #000;
 }
